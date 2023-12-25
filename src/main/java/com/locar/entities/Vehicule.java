@@ -1,8 +1,14 @@
 package com.locar.entities;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class Vehicule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String modele;
     private float caution;
@@ -16,12 +22,17 @@ public class Vehicule {
     private boolean disponible;
     private String etat;
     private String description;
-    private ArrayList<Tarif> tarifs;
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tarif> tarifs;
+    @ManyToOne
+    @JoinColumn(name = "categorie_id")
     private Categorie categorie;
-    private ArrayList<Image> images;
+    @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images;
+
 
     public Vehicule() {
-        this.tarifs = new ArrayList<Tarif>();
+        this.tarifs = new ArrayList<>();
         this.images = new ArrayList<>();
     }
 
@@ -130,11 +141,11 @@ public class Vehicule {
         this.description = description;
     }
 
-    public ArrayList<Tarif> getTarifs() {
+    public List<Tarif> getTarifs() {
         return this.tarifs;
     }
 
-    public ArrayList<Tarif> addTarifs(Tarif tarif)
+    public List<Tarif> addTarifs(Tarif tarif)
     {
         if (!this.tarifs.contains(tarif)) {
             this.tarifs.add(tarif);
@@ -143,17 +154,17 @@ public class Vehicule {
         return this.tarifs;
     }
 
-    public ArrayList<Tarif> removeTarifs(Tarif tarif)
+    public List<Tarif> removeTarifs(Tarif tarif)
     {
         this.tarifs.remove(tarif);
         return this.tarifs;
     }
 
-    public ArrayList<Image> getImages() {
+    public List<Image> getImages() {
         return this.images;
     }
 
-    public ArrayList<Image> addImages(Image image)
+    public List<Image> addImages(Image image)
     {
         if (!this.images.contains(image)) {
             this.images.add(image);
@@ -162,7 +173,7 @@ public class Vehicule {
         return this.images;
     }
 
-    public ArrayList<Image> removeImages(Image image)
+    public List<Image> removeImages(Image image)
     {
         this.images.remove(image);
         return this.images;

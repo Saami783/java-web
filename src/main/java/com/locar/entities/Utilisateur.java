@@ -2,6 +2,9 @@ package com.locar.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Utilisateur {
 
@@ -17,14 +20,17 @@ public class Utilisateur {
     private String ville;
     private String telephone;
     private String password;
-
     @Column(name = "permis_path")
     private String permisPath;
     private int age;
     private boolean isVerified;
     private boolean isVerifiedByAdmin;
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations;
 
-    public Utilisateur() { }
+    public Utilisateur() {
+        this.reservations =  new ArrayList<>();
+    }
 
     public Utilisateur(Long id, String roles, String nom, String prenom, String email, String adresse, String codePostal, String ville, String telephone, String password, String permisPath, int age, boolean isVerified, boolean isVerifiedByAdmin) {
         this.id = id;
