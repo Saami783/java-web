@@ -1,12 +1,15 @@
 package com.locar.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class Utilisateur {
+public class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,11 +17,13 @@ public class Utilisateur {
     private String roles = "ROLE_USER";
     private String nom;
     private String prenom;
+    @Column
     private String email;
     private String adresse;
     private String codePostal;
     private String ville;
     private String telephone;
+    @Column
     private String password;
     @Column(name = "permis_path")
     private String permisPath;
@@ -121,10 +126,6 @@ public class Utilisateur {
         this.telephone = telephone;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -180,4 +181,40 @@ public class Utilisateur {
                 ", isVerifiedByAdmin=" + isVerifiedByAdmin +
                 '}';
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
 }

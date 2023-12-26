@@ -1,14 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-    <title>Accueil</title>
+    <title th:text="${pageTitle}">Page d'Accueil</title>
 </head>
 <body>
-<h1>Liste des Utilisateurs</h1>
-<ul>
-    <li th:each="utilisateur : ${utilisateurs}">
-        <span th:text="${utilisateur.email}">Email</span>
-    </li>
-</ul>
+
+
+<section layout:fragment="content">
+    <h1>Liste des Utilisateurs</h1>
+    <ul>
+        <li th:each="vehicule : ${vehicules}">
+            <span th:text="${vehicule.modele}">Email</span>
+        </li>
+    </ul>
+</section>
+
 </body>
 </html>

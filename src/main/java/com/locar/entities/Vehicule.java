@@ -18,8 +18,8 @@ public class Vehicule {
     private int annee;
     private String boiteVitesse;
     private String fuel;
-    private int nbCheveux;
-    private boolean disponible;
+    private int nbCheveaux;
+    private boolean isDisponible;
     private String etat;
     private String description;
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -109,20 +109,20 @@ public class Vehicule {
         this.fuel = fuel;
     }
 
-    public int getNbCheveux() {
-        return nbCheveux;
+    public int getNbCheveaux() {
+        return nbCheveaux;
     }
 
-    public void setNbCheveux(int nbCheveux) {
-        this.nbCheveux = nbCheveux;
+    public void setNbCheveaux(int nbCheveux) {
+        this.nbCheveaux = nbCheveux;
     }
 
-    public boolean isDisponible() {
-        return disponible;
+    public boolean isIsDisponible() {
+        return isDisponible;
     }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    public void setIsDisponible(boolean disponible) {
+        this.isDisponible = disponible;
     }
 
     public String getEtat() {

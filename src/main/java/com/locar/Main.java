@@ -1,7 +1,9 @@
 package com.locar;
 
 import com.locar.dao.UtilisateurRepository;
+import com.locar.dao.VehiculeRepository;
 import com.locar.entities.Utilisateur;
+import com.locar.entities.Vehicule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class Main {
-    private final UtilisateurRepository utilisateurRepository;
+    private final VehiculeRepository vehiculeRepository;
 
-    public Main(UtilisateurRepository utilisateurRepository) {
-        this.utilisateurRepository = utilisateurRepository;
+    public Main(VehiculeRepository vehiculeRepository) {
+        this.vehiculeRepository = vehiculeRepository;
     }
 
     public static void main(String[] args) {
@@ -27,9 +29,9 @@ public class Main {
 
     @GetMapping
     public String home(Model model) {
-        List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
+        List<Vehicule> vehicules = vehiculeRepository.findAll();
 
-        model.addAttribute("utilisateurs", utilisateurs);
+        model.addAttribute("vehicules", vehicules);
         return "home";
     }
 
