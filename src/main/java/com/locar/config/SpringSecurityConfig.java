@@ -39,21 +39,14 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request -> request
-                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .failureUrl("/login?error")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout"))
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
-
-        return http.build();
+        return http.authorizeHttpRequests(auth -> {
+            auth.requestMatchers("/admin").hasRole("ADMIN");
+            auth.requestMatchers("/user").hasRole("USER");
+            auth.requestMatchers("/register").permitAll();
+            auth.anyRequest().authenticated();
+        }).formLogin(Customizer.withDefaults()).build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
