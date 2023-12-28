@@ -7,15 +7,26 @@
 </head>
 <body>
 
-
 <section layout:fragment="content">
-    <h1>Liste des Utilisateurs</h1>
-    <ul>
-        <li th:each="vehicule : ${vehicules}">
-            <span th:text="${vehicule.modele}">Email</span>
-        </li>
-    </ul>
+    <h1>Liste des Véhicules</h1>
+    <div th:each="vehicule : ${vehicules}">
+        <h2><a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}"> Détail du véhicule</a></h2>
+        <p>Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
+        <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
+        <h3>Tarifs:</h3>
+        <ul>
+            <li th:each="tarif : ${vehicule.tarifs}">
+                <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
+            </li>
+        </ul>
+        <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
+        <h3>Images:</h3>
+        <div th:each="image : ${vehicule.images}">
+            <img th:src="@{${image.url}}" alt="Image du véhicule"/>
+        </div>
+    </div>
 </section>
 
 </body>
 </html>
+

@@ -10,7 +10,7 @@ public class Tarif {
     private String calendrier;
     private float prix;
     private int km;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Vehicule vehicule;
 
     public Tarif() { }

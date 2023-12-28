@@ -1,4 +1,4 @@
-package com.locar.controllers.security;
+package com.locar.controllers.auth;
 
 import com.locar.entities.Utilisateur;
 import com.locar.services.UtilisateurService;
@@ -27,7 +27,7 @@ public class RegisterController {
     @GetMapping
     public String showSignupForm(Model model) {
         model.addAttribute("user", new Utilisateur());
-        return "security/register";
+        return "auth/register";
     }
 
     @PostMapping

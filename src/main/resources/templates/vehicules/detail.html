@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+    <title th:text="${pageTitle}">Détail du véhicule</title>
+</head>
+<body>
+
+<section layout:fragment="content">
+    <h1 th:text="${vehicule.modele}">Modèle du véhicule</h1>
+    <p>Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
+    <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
+    <h3>Tarifs:</h3>
+    <ul>
+        <li th:each="tarif : ${vehicule.tarifs}">
+            <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
+        </li>
+    </ul>
+    <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
+    <h3>Images:</h3>
+    <div th:each="image : ${vehicule.images}">
+        <img th:src="@{${image.url}}" alt="Image du véhicule"/>
+    </div>
+
+    <h3>Réserver ce véhicule</h3>
+    <form th:action="@{/reservations/create}" th:object="${reservation}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div>
+            <label for="dateDebutReservation">Date de début:</label>
+            <input type="date" id="dateDebutReservation" th:field="*{dateDebutReservation}" required>
+        </div>
+        <div>
+            <label for="dateFinReservation">Date de fin:</label>
+            <input type="date" id="dateFinReservation" th:field="*{dateFinReservation}" required>
+        </div>
+        <input type="hidden" th:field="*{vehicule.id}" />
+        <button type="submit" class="btn btn-primary">Réserver ce véhicule</button>
+    </form>
+</section>
+
+</body>
+</html>
