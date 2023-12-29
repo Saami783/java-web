@@ -9,15 +9,28 @@
     <section layout:fragment="content">
         <br><br>
     <h1>Mes réservations </h1>
+        <br><br>
+        <div th:if="${error}" class="alert alert-danger">
+            <p th:text="${error}">Message d'erreur</p>
+        </div>
+        <div th:if="${success}" class="alert alert-success">
+            <p th:text="${success}">Message de succès</p>
+        </div>
+
     <div th:each="reservation : ${reservations}">
-
         <h2><a th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Détail du véhicule</a></h2>
-
         <p>Prix total: <span th:text="${reservation.prix}+ '€'">Prix total :</span></p>
+        <p>Début de la location : <span th:text="${#dates.format(reservation.dateDebutReservation, 'dd-MMM-yyyy')}"> </span></p>
+        <p>Fin de la location : <span th:text="${#dates.format(reservation.dateFinReservation, 'dd-MMM-yyyy')}"> </span> </p>
+        <p>Jours total : <span th:text="${reservation.nbJourReserve}+ 'jours'">Prix total :</span></p>
+        <p>Réservation effectué le : <span th:text="${#dates.format(reservation.createdAt, 'dd-MMM-yyyy')}"> </span></p>
+
+        <h2><a class="btn btn-info" th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Plus de détails</a></h2>
+
+        <h2 th:unless="${reservation.facture}"><a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a></h2>
 
         <hr>
     </div>
-
     </section>
 </body>
 

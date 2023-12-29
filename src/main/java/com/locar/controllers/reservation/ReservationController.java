@@ -8,6 +8,7 @@ import com.locar.entities.Vehicule;
 import com.locar.services.ReservationService;
 import com.locar.services.UtilisateurService;
 import com.locar.services.VehiculeService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -23,6 +24,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -72,6 +74,44 @@ public class ReservationController {
         } else {
             return "redirect:/reservations";
         }
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editForm(@PathVariable Long id, Model model) {
+        return "reservations/edit";
+    }
+
+    @PostMapping("edit/{id}")
+    public String edit(@PathVariable Long id, Model model) {
+        return "reservations/edit";
+    }
+
+    @GetMapping("/delete/{id}")
+    @Transactional
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
+        Optional<Reservation> reservation = this.reservationService.findById(id);
+        Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
+        try{
+            if (!Objects.equals(reservation.get().getUtilisateur().getId(), utilisateur.getId())) {
+                redirectAttributes.addFlashAttribute("error", "Vous ne pouvez pas supprimer " +
+                        "une réservation qui n'est pas la vôtre.");
+                return "redirect:/reservations";
+            }
+            if(reservation.get().getFacture() == null) {
+                this.reservationService.deleteById(reservation.get().getId());
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Impossible de supprimer une " +
+                        "réservation déjà payée.");
+                return "redirect:/reservations";
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de " +
+                    "la suppression de la réservation");
+            return "redirect:/reservations";
+        }
+        redirectAttributes.addFlashAttribute("success", "Votre réservation a été supprimée avec succès");
+        return "redirect:/reservations";
     }
 
     @PostMapping("/create")
