@@ -34,11 +34,14 @@ public class VehiculeController {
     public String detail(@PathVariable Long id, Model model) {
         Optional<Vehicule> vehiculeOpt = vehiculeService.findById(id);
         if (vehiculeOpt.isPresent()) {
+            Reservation reservation = new Reservation();
+            reservation.setVehicule(vehiculeOpt.get()); // Associe le véhicule à la réservation
             model.addAttribute("vehicule", vehiculeOpt.get());
-            model.addAttribute("reservation", new Reservation());
+            model.addAttribute("reservation", reservation);
             return "vehicules/detail";
         } else {
             return "vehicules/index";
         }
     }
+
 }

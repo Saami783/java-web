@@ -30,4 +30,8 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
+    public List<Reservation> findByUtilisateurId(Long utilisateurId) {
+        return reservationRepository.findByUtilisateurId(utilisateurId);
+    }
+
 }

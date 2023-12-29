@@ -22,4 +22,13 @@ public class Tarif {
     public void setPrix(float prix) { this.prix = prix; }
     public int getKm() { return km; }
     public void setKm(int km) { this.km = km; }
+
+    @Override
+    public String toString() {
+        return "Tarif{" +
+                "id=" + id +
+                ", calendrier='" + calendrier + '\'' +
+                ", prix=" + prix +
+                ", km=" + km ;
+    }
 }

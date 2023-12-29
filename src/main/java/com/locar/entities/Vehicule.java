@@ -187,4 +187,26 @@ public class Vehicule {
     {
         this.categorie = categorie;
     }
+
+    @Override
+    public String toString() {
+        return "Vehicule{" +
+                "id=" + id +
+                ", modele='" + modele + '\'' +
+                ", caution=" + caution +
+                ", nbKm=" + nbKm +
+                ", nbPlace=" + nbPlace +
+                ", couleur='" + couleur + '\'' +
+                ", annee=" + annee +
+                ", boiteVitesse='" + boiteVitesse + '\'' +
+                ", fuel='" + fuel + '\'' +
+                ", nbCheveaux=" + nbCheveaux +
+                ", isDisponible=" + isDisponible +
+                ", etat='" + etat + '\'' +
+                ", description='" + description + '\'' +
+                ", tarifs=" + tarifs +
+                ", categorie=" + categorie +
+                ", images=" + images +
+                '}';
+    }
 }

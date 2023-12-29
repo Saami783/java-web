@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${pageTitle}">Details de mes reservations</title>
 </head>
 <body>
 
+<section layout:fragment="content">
+
+</section>
+
 </body>
+
 </html>

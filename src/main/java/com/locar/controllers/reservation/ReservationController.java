@@ -12,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.beans.PropertyEditorSupport;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.security.Principal;
 import java.time.LocalDate;
@@ -49,10 +51,15 @@ public class ReservationController {
     }
 
     @GetMapping
-    public String home(Model model) {
-        List<Reservation> reservations = reservationService.findAll();
+    public String index(Model model, Principal principal) {
+        if (principal != null) {
 
-        model.addAttribute("reservations", reservations);
+            Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
+
+            List<Reservation> reservations = reservationService.findByUtilisateurId(utilisateur.getId());
+
+            model.addAttribute("reservations", reservations);
+        }
         return "reservations/index";
     }
 
@@ -68,33 +75,44 @@ public class ReservationController {
     }
 
     @PostMapping("/create")
-    public String createReservation(@ModelAttribute Reservation reservation, Model model, Principal principal) {
-        try {
-            Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
-            Vehicule vehicule = vehiculeService.findById(reservation.getVehicule().getId()).orElseThrow();
+    public String create(@ModelAttribute Reservation reservation, Model model, Principal principal, RedirectAttributes redirectAttributes) {
 
-            // Récupérer les tarifs du véhicule
+        Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
+
+        Vehicule vehicule = vehiculeService.findById(reservation.getVehicule().getId()).orElseThrow();
+        Long vehiculeId = reservation.getVehicule().getId();
+
+        try {
+
+            if (!utilisateur.isVerified() || !utilisateur.isVerifiedByAdmin()) {
+                redirectAttributes.addFlashAttribute("error", "Votre compte doit être vérifié pour effectuer cette action.");
+                return "redirect:/vehicules/" + vehiculeId;
+            }
             List<Tarif> tarifs = vehiculeService.getTarifs(vehicule);
 
-            // Calcul du prix
+            LocalDate debut = reservation.getDateDebutReservation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate fin = reservation.getDateFinReservation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            long nombreDeJours = ChronoUnit.DAYS.between(debut, fin);
+            reservation.setNbJourReserve((int) nombreDeJours);
+
             float prix = calculerPrix(tarifs, reservation.getNbJourReserve());
             reservation.setPrix(prix);
-
-            // Autres configurations
             reservation.setUtilisateur(utilisateur);
             reservation.setVehicule(vehicule);
+            reservation.setFacture(null);
+
             reservationService.save(reservation);
 
-            return "redirect:/reservations/success";
+            return "redirect:/reservations";
 
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("error", "Une erreur est survenue lors de la création de la réservation: " + e.getMessage());
-            return "reservations/error";
+            model.addAttribute("error", "Une erreur est survenue lors de " +
+                    "la création de la réservation: " + e.getMessage());
+            return "redirect:/vehicules/" + vehiculeId;
         }
     }
-
-
 
     private float calculerPrix(List<Tarif> tarifs, int nbJours) {
 
@@ -118,15 +136,15 @@ public class ReservationController {
 
         // Calcul du prix en fonction du nombre de jours
         if (nbJours >= 22) {
-            return prixMensuel; // Tarif mensuel
+            return prixMensuel;
         } else if (nbJours >= 15) {
-            return prixHebdo * 3; // 3 semaines
+            return prixHebdo * 3;
         } else if (nbJours >= 8) {
-            return prixHebdo * 2; // 2 semaines
+            return prixHebdo * 2;
         } else if (nbJours == 7) {
-            return prixHebdo; // 1 semaine
+            return prixHebdo;
         } else {
-            return prixJour * nbJours; // Tarif journalier
+            return prixJour * nbJours;
         }
     }
 

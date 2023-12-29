@@ -14,4 +14,12 @@ public class Avis {
     private Reservation reservation;
 
     public Avis() { }
+
+    @Override
+    public String toString() {
+        return "Avis{" +
+                "id=" + id +
+                ", reservation=" + reservation +
+                '}';
+    }
 }

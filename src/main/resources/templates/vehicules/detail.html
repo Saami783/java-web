@@ -24,6 +24,9 @@
     </div>
 
     <h3>Réserver ce véhicule</h3>
+    <div th:if="${error}" class="alert alert-danger">
+        <p th:text="${error}">Message d'erreur</p>
+    </div>
     <form th:action="@{/reservations/create}" th:object="${reservation}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div>
