@@ -20,10 +20,6 @@
             </li>
         </ul>
         <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
-        <h3>Images:</h3>
-        <div th:each="image : ${vehicule.images}">
-            <img th:src="@{${image.url}}" alt="Image du véhicule"/>
-        </div>
     </div>
 </section>
 

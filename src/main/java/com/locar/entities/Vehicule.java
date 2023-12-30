@@ -22,6 +22,7 @@ public class Vehicule {
     private boolean isDisponible;
     private String etat;
     private String description;
+    private String folder;
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Tarif> tarifs;
 
@@ -30,8 +31,7 @@ public class Vehicule {
     private Categorie categorie;
 
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Image> images;
-
+    private List<VehiculeImages> images;
 
     public Vehicule() {
         this.tarifs = new ArrayList<>();
@@ -162,11 +162,11 @@ public class Vehicule {
         return this.tarifs;
     }
 
-    public List<Image> getImages() {
+    public List<VehiculeImages> getImages() {
         return this.images;
     }
 
-    public List<Image> addImages(Image image)
+    public List<VehiculeImages> addImages(VehiculeImages image)
     {
         if (!this.images.contains(image)) {
             this.images.add(image);
@@ -175,7 +175,7 @@ public class Vehicule {
         return this.images;
     }
 
-    public List<Image> removeImages(Image image)
+    public List<VehiculeImages> removeImages(VehiculeImages image)
     {
         this.images.remove(image);
         return this.images;
@@ -186,6 +186,30 @@ public class Vehicule {
     public void setCategorie(Categorie categorie)
     {
         this.categorie = categorie;
+    }
+
+    public boolean isDisponible() {
+        return isDisponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        isDisponible = disponible;
+    }
+
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
+    }
+
+    public void setTarifs(List<Tarif> tarifs) {
+        this.tarifs = tarifs;
+    }
+
+    public void setImages(List<VehiculeImages> images) {
+        this.images = images;
     }
 
     @Override
