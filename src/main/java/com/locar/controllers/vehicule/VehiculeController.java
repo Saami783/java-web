@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +32,11 @@ public class VehiculeController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable Long id, Model model) {
+    public String detail(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         Optional<Vehicule> vehiculeOpt = vehiculeService.findById(id);
         if (vehiculeOpt.isPresent()) {
             Reservation reservation = new Reservation();
-            reservation.setVehicule(vehiculeOpt.get()); // Associe le véhicule à la réservation
+            reservation.setVehicule(vehiculeOpt.get());
             model.addAttribute("vehicule", vehiculeOpt.get());
             model.addAttribute("reservation", reservation);
             return "vehicules/detail";

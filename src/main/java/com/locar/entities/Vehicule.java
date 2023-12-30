@@ -119,10 +119,6 @@ public class Vehicule {
         this.nbCheveaux = nbCheveux;
     }
 
-    public boolean isIsDisponible() {
-        return isDisponible;
-    }
-
     public void setIsDisponible(boolean disponible) {
         this.isDisponible = disponible;
     }

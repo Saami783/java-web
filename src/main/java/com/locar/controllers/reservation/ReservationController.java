@@ -181,8 +181,12 @@ public class ReservationController {
         Vehicule vehicule = this.vehiculeService.findById(reservation.getVehicule().getId()).orElseThrow();
         Long vehiculeId = reservation.getVehicule().getId();
 
-        try {
+        if (!vehicule.isDisponible()) {
+            redirectAttributes.addFlashAttribute("error", "Impossible de louer un véhicule indisponible.");
+            return "redirect:/vehicules/" + vehicule.getId();
+        }
 
+        try {
             if (!utilisateur.isVerified() || !utilisateur.isVerifiedByAdmin()) {
                 redirectAttributes.addFlashAttribute("error", "Votre compte doit être vérifié pour effectuer cette action.");
                 return "redirect:/vehicules/" + vehiculeId;

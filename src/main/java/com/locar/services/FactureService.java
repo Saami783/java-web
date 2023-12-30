@@ -24,7 +24,7 @@ public class FactureService {
     }
 
     public Facture save(Facture facture) {
-        return factureRepository.save(user);
+        return factureRepository.save(facture);
     }
 
     public void deleteById(Long id) {

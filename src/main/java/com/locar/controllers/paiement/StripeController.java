@@ -1,8 +1,11 @@
 package com.locar.controllers.paiement;
 
 import com.locar.config.StripeProperties;
+import com.locar.entities.Facture;
 import com.locar.entities.Reservation;
 import com.locar.entities.Utilisateur;
+import com.locar.entities.Vehicule;
+import com.locar.services.FactureService;
 import com.locar.services.ReservationService;
 import com.locar.services.UtilisateurService;
 import com.locar.services.VehiculeService;
@@ -29,28 +32,39 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class StripeController {
     private final StripeProperties stripeProperties;
     private final ReservationService reservationService;
+    private final FactureService factureService;
     private final UtilisateurService utilisateurService;
     private final VehiculeService vehiculeService;
 
     @Autowired
     public StripeController(StripeProperties stripeProperties, ReservationService reservationService,
-                            UtilisateurService utilisateurService, VehiculeService vehiculeService) {
+                           FactureService factureService, UtilisateurService utilisateurService, VehiculeService vehiculeService) {
         this.stripeProperties = stripeProperties;
         this.reservationService = reservationService;
+        this.factureService = factureService;
         this.utilisateurService = utilisateurService;
         this.vehiculeService = vehiculeService;
         Stripe.apiKey = stripeProperties.getApiKey();
     }
 
     @GetMapping("/{id}")
-    public String createCheckoutSession(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String createCheckoutSession(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
+        if (principal == null) {
+            redirectAttributes.addFlashAttribute("error", "Vous devez être connecté pour effectuer cette action.");
+            return "redirect:/login";
+        }
         try {
+            Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
             Optional<Reservation> optionalReservation = reservationService.findById(id);
             if (!optionalReservation.isPresent()) {
                 redirectAttributes.addFlashAttribute("error", "Réservation non trouvée.");
                 return "redirect:/reservations";
             }
             Reservation reservation = optionalReservation.get();
+            if (!reservation.getUtilisateur().getId().equals(utilisateur.getId())) {
+                redirectAttributes.addFlashAttribute("error", "Vous n'avez pas les permissions pour accéder à cette réservation.");
+                return "redirect:/reservations/" + reservation.getId();
+            }
 
             String paymentToken = UUID.randomUUID().toString();
             reservation.setPaymentToken(paymentToken);
@@ -70,7 +84,8 @@ public class StripeController {
                                                     .setUnitAmount(totalAmount)
                                                     .setProductData(
                                                             SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                    .setName("Location " + reservation.getVehicule().getModele() + " " + reservation.getVehicule().getCategorie().getLibelle())
+                                                                    .setName("Location " + reservation.getVehicule().getCategorie().getLibelle() + " " +
+                                                                            reservation.getVehicule().getModele() + " " + " " + reservation.getNbJourReserve() + " jours.")
                                                                     .build())
                                                     .build())
                                     .build())
@@ -84,7 +99,7 @@ public class StripeController {
         } catch (StripeException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la création de la session de paiement Stripe.");
-            return "redirect:/erreur";
+            return "redirect:/reservations";
         }
     }
 
@@ -99,20 +114,34 @@ public class StripeController {
             Optional<Reservation> reservationOpt = reservationService.findByPaymentToken(paymentToken);
             if (!reservationOpt.isPresent()) {
                 redirectAttributes.addFlashAttribute("error", "Réservation non trouvée avec le token de paiement.");
-                return "redirect:/erreur";
+                return "redirect:/reservations/" + reservationOpt.get().getId();
             }
 
             Reservation reservation = reservationOpt.get();
+            Facture facture = new Facture();
+            facture.setPaid(true);
+            facture.setMontantTotal(reservation.getPrix());
+            factureService.save(facture);
 
-            System.out.println(reservation);
-            System.exit(0);
+            reservation.setFacture(facture);
+            reservation.setPaymentToken(null);
+            reservationService.save(reservation);
 
-            redirectAttributes.addFlashAttribute("success", "Paiement réussi!");
-            return "redirect:/reservations";
+            Optional<Vehicule> vehiculeOptional = vehiculeService.findById(reservation.getVehicule().getId());
+            if (vehiculeOptional.isPresent()) {
+                vehiculeOptional.get().setIsDisponible(false);
+                vehiculeService.save(vehiculeOptional.get());
+            }
+            redirectAttributes.addFlashAttribute("success", "Le paiement a été effectué avec succès et la facture a été créée.");
+            return "redirect:/reservations/" + reservation.getId();
         } catch (StripeException e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la récupération des informations de paiement.");
-            return "redirect:/erreur";
+            return "redirect:/reservations";
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Une erreur interne est survenue.");
+            return "redirect:/reservations";
         }
     }
 
