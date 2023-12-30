@@ -1,6 +1,5 @@
 package com.locar.controllers.reservation;
 
-import com.locar.dao.ReservationRepository;
 import com.locar.entities.Reservation;
 import com.locar.entities.Tarif;
 import com.locar.entities.Utilisateur;
