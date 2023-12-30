@@ -41,7 +41,7 @@ public class SpringSecurityConfig {
             auth.requestMatchers("/admin").hasRole("ADMIN");
             auth.requestMatchers("/user", "/reservations" , "/reservations/{id}").hasRole("USER");
             auth.requestMatchers("/reservations/create").hasRole("USER");
-            auth.requestMatchers("/register", "/", "/vehicules", "/vehicules/{id}").permitAll();
+            auth.requestMatchers("/register", "/", "/vehicules", "/vehicules/{id}", "/uploads/**").permitAll();
             auth.anyRequest().authenticated();
         }).formLogin(Customizer.withDefaults()).build();
     }
