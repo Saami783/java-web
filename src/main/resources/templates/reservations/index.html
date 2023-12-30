@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layouts/base}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${pageTitle}">Mes réservation</title>
 </head>
@@ -10,25 +10,38 @@
         <br><br>
     <h1>Mes réservations </h1>
         <br><br>
-        <div th:if="${error}" class="alert alert-danger">
+        <div class="alert alert-danger" th:if="${error}">
             <p th:text="${error}">Message d'erreur</p>
         </div>
-        <div th:if="${success}" class="alert alert-success">
+        <div class="alert alert-success" th:if="${success}">
             <p th:text="${success}">Message de succès</p>
         </div>
 
     <div th:each="reservation : ${reservations}">
-        <h2><a th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Détail du véhicule</a></h2>
+        <h2><a th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Détail de la réservation</a></h2>
         <p>Prix total: <span th:text="${reservation.prix}+ '€'">Prix total :</span></p>
         <p>Début de la location : <span th:text="${#dates.format(reservation.dateDebutReservation, 'dd-MMM-yyyy')}"> </span></p>
         <p>Fin de la location : <span th:text="${#dates.format(reservation.dateFinReservation, 'dd-MMM-yyyy')}"> </span> </p>
         <p>Jours total : <span th:text="${reservation.nbJourReserve}+ 'jours'">Prix total :</span></p>
         <p>Réservation effectué le : <span th:text="${#dates.format(reservation.createdAt, 'dd-MMM-yyyy')}"> </span></p>
 
-        <h2><a class="btn btn-info" th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Plus de détails</a></h2>
-
-        <h2 th:unless="${reservation.facture}"><a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a></h2>
-
+        <div class="container">
+            <div class="row">
+                <div class="col col-2">
+                    <!--         Ajouter le lien de paiement !           -->
+                    <h2 th:unless="${reservation.facture}"><a class="btn btn-success" th:text="'Payer'">Payer</a></h2>
+                </div>
+                <div class="col col-2">
+                    <h2><a class="btn btn-primary" th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Plus de détails'">Plus de détails</a></h2>
+                </div>
+                <div class="col col-2">
+                    <h2 th:unless="${reservation.facture}"><a class="btn btn-info" th:href="@{/reservations/edit/{id}(id=${reservation.id})}" th:text="'Modifier'">Modifier</a></h2>
+                </div>
+                <div class="col col-2">
+                    <h2 th:unless="${reservation.facture}"><a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a></h2>
+                </div>
+                </div>
+            </div>
         <hr>
     </div>
     </section>

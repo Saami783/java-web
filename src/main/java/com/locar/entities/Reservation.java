@@ -115,6 +115,9 @@ public class Reservation {
                 ", prix=" + prix +
                 ", createdAt=" + createdAt +
                 ", utilisateur=" + utilisateur +
+                ", facture=" + facture +
+                ", avis=" + avis +
+
                 '}';
     }
 }

@@ -56,9 +56,9 @@ public class ReservationController {
     public String index(Model model, Principal principal) {
         if (principal != null) {
 
-            Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
+            Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
 
-            List<Reservation> reservations = reservationService.findByUtilisateurId(utilisateur.getId());
+            List<Reservation> reservations = this.reservationService.findByUtilisateurId(utilisateur.getId());
 
             model.addAttribute("reservations", reservations);
         }
@@ -77,14 +77,74 @@ public class ReservationController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
-        return "reservations/edit";
+    public String edit(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes, Principal principal) {
+        try {
+            Optional<Reservation> reservation = this.reservationService.findById(id);
+            Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
+
+            if (reservation.isPresent()) {
+                if(!Objects.equals(reservation.get().getUtilisateur().getId(), utilisateur.getId())) {
+                    redirectAttributes.addFlashAttribute("error", "Impossible de modifier cette réservation");
+                    return "redirect:/reservations";
+                } else if(reservation.get().getFacture() != null) {
+                    redirectAttributes.addFlashAttribute("error", "Impossible de modifier une " +
+                            "réservation déjà payée.");
+                    return "redirect:/reservations";
+                }
+                model.addAttribute("reservation", reservation.get());
+                return "reservations/edit";
+            } else {
+                redirectAttributes.addFlashAttribute("error", "Impossible de modifier cette réservation");
+                return "redirect:/reservations";
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de la modification de la réservation");
+            return "redirect:/reservations";
+        }
     }
 
     @PostMapping("edit/{id}")
-    public String edit(@PathVariable Long id, Model model) {
-        return "reservations/edit";
+    public String update(@PathVariable Long id, @ModelAttribute("reservation") Reservation updatedReservation, Principal principal, RedirectAttributes redirectAttributes) {
+        Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
+        Optional<Reservation> reservationOptional = this.reservationService.findById(id);
+
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+
+            if (!Objects.equals(reservation.getUtilisateur().getId(), utilisateur.getId())) {
+                redirectAttributes.addFlashAttribute("error", "Vous n'êtes pas autorisé à modifier cette réservation.");
+                return "redirect:/reservations";
+            }
+
+            reservation.setDateDebutReservation(updatedReservation.getDateDebutReservation());
+            reservation.setDateFinReservation(updatedReservation.getDateFinReservation());
+
+            LocalDate debut = reservation.getDateDebutReservation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate fin = reservation.getDateFinReservation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            long nombreDeJours = ChronoUnit.DAYS.between(debut, fin);
+            reservation.setNbJourReserve((int) nombreDeJours);
+
+            Vehicule vehicule = reservation.getVehicule();
+            List<Tarif> tarifs = this.vehiculeService.getTarifs(vehicule);
+            float prix = calculerPrix(tarifs, reservation.getNbJourReserve());
+
+            if (prix == 0) {
+                redirectAttributes.addFlashAttribute("error", "Vous ne pouvez pas louer un véhicule au delà de 31 jours");
+                return "redirect:/reservations/edit/"+reservationOptional.get().getId();
+            }
+
+            reservation.setPrix(prix);
+
+            this.reservationService.save(reservation);
+
+            redirectAttributes.addFlashAttribute("success", "Réservation mise à jour avec succès");
+            return "redirect:/reservations";
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Réservation introuvable");
+            return "redirect:/reservations";
+        }
     }
+
 
     @GetMapping("/delete/{id}")
     @Transactional
@@ -117,9 +177,9 @@ public class ReservationController {
     @PostMapping("/create")
     public String create(@ModelAttribute Reservation reservation, Model model, Principal principal, RedirectAttributes redirectAttributes) {
 
-        Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
+        Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
 
-        Vehicule vehicule = vehiculeService.findById(reservation.getVehicule().getId()).orElseThrow();
+        Vehicule vehicule = this.vehiculeService.findById(reservation.getVehicule().getId()).orElseThrow();
         Long vehiculeId = reservation.getVehicule().getId();
 
         try {
@@ -128,7 +188,7 @@ public class ReservationController {
                 redirectAttributes.addFlashAttribute("error", "Votre compte doit être vérifié pour effectuer cette action.");
                 return "redirect:/vehicules/" + vehiculeId;
             }
-            List<Tarif> tarifs = vehiculeService.getTarifs(vehicule);
+            List<Tarif> tarifs = this.vehiculeService.getTarifs(vehicule);
 
             LocalDate debut = reservation.getDateDebutReservation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate fin = reservation.getDateFinReservation().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -137,12 +197,16 @@ public class ReservationController {
             reservation.setNbJourReserve((int) nombreDeJours);
 
             float prix = calculerPrix(tarifs, reservation.getNbJourReserve());
+            if (prix == 0) {
+                redirectAttributes.addFlashAttribute("error", "Vous ne pouvez pas louer un véhicule au delà de 31 jours");
+                return "redirect:/vehicules/" + vehiculeId;
+            }
             reservation.setPrix(prix);
             reservation.setUtilisateur(utilisateur);
             reservation.setVehicule(vehicule);
             reservation.setFacture(null);
 
-            reservationService.save(reservation);
+            this.reservationService.save(reservation);
 
             return "redirect:/reservations";
 
@@ -175,6 +239,9 @@ public class ReservationController {
         }
 
         // Calcul du prix en fonction du nombre de jours
+        if(nbJours >31) {
+          return prixHebdo = 0;
+        }
         if (nbJours >= 22) {
             return prixMensuel;
         } else if (nbJours >= 15) {

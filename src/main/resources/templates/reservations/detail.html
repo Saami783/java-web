@@ -8,7 +8,39 @@
 <body>
 
 <section layout:fragment="content">
+    <br><br>
+    <br><br>
+    <div class="alert alert-danger" th:if="${error}">
+        <p th:text="${error}">Message d'erreur</p>
+    </div>
+    <div class="alert alert-success" th:if="${success}">
+        <p th:text="${success}">Message de succès</p>
+    </div>
 
+    <div>
+        <h2><a th:text="'Reservation nº' + ${reservation.id}"> Détail du véhicule</a></h2>
+        <p>Prix total: <span th:text="${reservation.prix}+ '€'">Prix total :</span></p>
+        <p>Début de la location : <span th:text="${#dates.format(reservation.dateDebutReservation, 'dd-MMM-yyyy')}"> </span></p>
+        <p>Fin de la location : <span th:text="${#dates.format(reservation.dateFinReservation, 'dd-MMM-yyyy')}"> </span> </p>
+        <p>Jours total : <span th:text="${reservation.nbJourReserve}+ 'jours'">Prix total :</span></p>
+        <p>Réservation effectué le : <span th:text="${#dates.format(reservation.createdAt, 'dd-MMM-yyyy')}"> </span></p>
+
+        <div class="container">
+            <div class="row">
+                <div class="col col-2">
+                <!--         Ajouter le lien de paiement !           -->
+                    <h2 th:unless="${reservation.facture}"><a class="btn btn-success" th:text="'Payer'">Payer</a></h2>
+                </div>
+                <div class="col col-2">
+                    <h2 th:unless="${reservation.facture}"><a class="btn btn-info" th:href="@{/reservations/edit/{id}(id=${reservation.id})}" th:text="'Modifier'">Modifier</a></h2>
+                </div>
+                <div class="col col-2">
+                    <h2 th:unless="${reservation.facture}"><a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a></h2>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
 </section>
 
 </body>

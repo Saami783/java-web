@@ -1,10 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{layouts/base}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${pageTitle}">Ma réservation</title>
 </head>
 <body>
-
+<section layout:fragment="content">
+    <br><br><br><br>
+    <h2> Modification de la réservation </h2>
+    <div class="alert alert-danger" th:if="${error}">
+        <p th:text="${error}">Message d'erreur</p>
+    </div>
+    <form th:action="@{/reservations/edit/{id}(id=${reservation.id})}" th:object="${reservation}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div>
+            <label for="dateDebutReservation">Date de début:</label>
+            <input type="date" id="dateDebutReservation" th:field="*{dateDebutReservation}" required>
+        </div>
+        <div>
+            <label for="dateFinReservation">Date de fin:</label>
+            <input type="date" id="dateFinReservation" th:field="*{dateFinReservation}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Modifier ma réservation</button>
+    </form>
+</section>
 </body>
-</html>
