@@ -19,7 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class Main {
-    private VehiculeService vehiculeService;
+    private final VehiculeService vehiculeService;
 
     public Main(VehiculeService vehiculeService) {
         this.vehiculeService = vehiculeService;

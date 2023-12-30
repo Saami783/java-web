@@ -13,6 +13,7 @@ public class Reservation {
     private Date dateFinReservation;
     private int nbJourReserve;
     private float prix;
+    private String paymentToken;
     private Date createdAt;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "utilisateur_id", nullable = false)
@@ -103,6 +104,14 @@ public class Reservation {
 
     public void setVehicule(Vehicule vehicule) {
         this.vehicule = vehicule;
+    }
+
+    public String getPaymentToken() {
+        return paymentToken;
+    }
+
+    public void setPaymentToken(String payement_token) {
+        this.paymentToken = payement_token;
     }
 
     @Override
