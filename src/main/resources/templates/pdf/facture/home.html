@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="FR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .invoice-header {
+            padding: 20px;
+            text-align: center;
+        }
+        .invoice-header h1 {
+            border: 2px solid #dee2e6;
+            display: inline-block;
+            padding: 10px;
+        }
+        .contact-info {
+            width: 100%;
+            display: table;
+            padding: 20px;
+        }
+        .contact-info div {
+            display: table-cell;
+        }
+        .order-summary {
+            padding: 20px;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .invoice-table th,
+        .invoice-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+        }
+        .invoice-footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+    <title th:text="'Facture #' + ${facture.id}">Facture</title>
+</head>
+<body>
+<header class="invoice-header">
+    <h1 th:text="'Facture #' + ${facture.id}">Facture</h1>
+</header>
+
+<div class="contact-info">
+    <div>
+        <strong>LOCAR</strong><br>
+        56 Boulevard de l’Imaginaire<br>
+        75008 PARIS<br>
+        <a href="https://locar.sami-bahij.com">https://locar.sami-bahij.com</a>
+    </div>
+    <div style="text-align: right;">
+        <strong th:text="${reservation.utilisateur.nom} + ' ' + ${reservation.utilisateur.prenom}">Nom Prénom</strong><br>
+        <span th:text="${reservation.utilisateur.email}">email@example.com</span><br>
+        tél: <span th:text="${reservation.utilisateur.telephone}">123456789</span> <br>
+        <strong th:text="${'Reservation nº' + reservation.id}">Numero de la reservation</strong><br>
+    </div>
+</div>
+
+<div class="order-summary">
+    <h2>Récapitulatif de la location</h2>
+    <table class="invoice-table">
+        <tr>
+            <td>Période</td>
+            <td th:text="'du ' + ${#dates.format(reservation.dateDebutReservation, 'dd-MM-yyyy')} + ' au ' + ${#dates.format(reservation.dateFinReservation, 'dd-MM-yyyy')} + ' pour un total de ' + ${reservation.nbJourReserve} + ' jours'">Période</td>
+        </tr>
+        <tr>
+            <td>Modèle du véhicule</td>
+            <td th:text="${vehicule.getCategorie().libelle + ' ' + vehicule.modele}">Modèle du véhicule</td>
+        </tr>
+        <tr>
+            <td>Prix par jour</td>
+            <td th:text="${tarif.prix} + ' €'">Prix par jour</td>
+        </tr>
+        <tr>
+            <td>Total de la location</td>
+            <td th:text="${reservation.prix} + ' €'">Total de la location</td>
+        </tr>
+    </table>
+
+    <h3 th:text="'Montant Total : ' + ${facture.montantTotal} + ' €'">Montant Total</h3>
+</div>
+
+<footer class="invoice-footer">
+    &copy; Locar Society
+</footer>
+</body>
+</html>
