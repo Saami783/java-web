@@ -5,7 +5,10 @@
 </head>
 <body>
 <h1>Créer un Nouvel Utilisateur</h1>
-<form th:action="@{/register}" th:object="${user}" method="post">
+<div class="alert alert-danger" th:if="${error}">
+  <p th:text="${error}">Message d'erreur</p>
+</div>
+<form th:action="@{/register}" th:object="${user}" method="post" enctype="multipart/form-data">
   <div>
     <label for="email">Email:</label>
     <input type="email" id="email" th:field="*{email}" required />
@@ -38,13 +41,17 @@
     <label for="password">Mot de passe:</label>
     <input type="password" id="password" th:field="*{password}" required />
   </div>
-  <div>
-    <label for="permisPath">Chemin du Permis:</label>
-    <input type="text" id="permisPath" th:field="*{permisPath}" />
-  </div>
+<!--  <div>-->
+<!--    <label for="permisPath">Chemin du Permis:</label>-->
+<!--    <input type="text" id="permisPath" th:field="*{permisPath}" />-->
+<!--  </div>-->
   <div>
     <label for="age">Age:</label>
     <input type="number" id="age" th:field="*{age}" required />
+  </div>
+  <div>
+    <label for="permis">Votre permis de conduire:</label>
+    <input type="file" id="permis" accept=".jpg, .jpeg, .png" name="permis" required />
   </div>
   <div>
     <button type="submit">Enregistrer</button>
