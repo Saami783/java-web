@@ -37,6 +37,10 @@ public class Facture {
         isPaid = paid;
     }
 
+    public Reservation getReservation() {
+        return reservation;
+    }
+
     @Override
     public String toString() {
         return "Facture{" +
