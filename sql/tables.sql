@@ -70,6 +70,7 @@ create table reservation (
     utilisateur_id int not null,
     vehicule_id int not null,
     facture_id int default NULL,
+    payment_token varchar(255) null,
     created_at Datetime default CURRENT_TIMESTAMP,
     updated_at Datetime default CURRENT_TIMESTAMP,
     foreign key (utilisateur_id) references utilisateur(id),

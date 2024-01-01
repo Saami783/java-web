@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.beans.PropertyEditorSupport;
+import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.security.Principal;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +32,7 @@ public class ReservationController {
     private final ReservationService reservationService;
     private final VehiculeService vehiculeService;
     private final UtilisateurService utilisateurService;
+
     public ReservationController(ReservationService reservationService, VehiculeService vehiculeService, UtilisateurService utilisateurService) {
         this.reservationService = reservationService;
         this.vehiculeService = vehiculeService;
@@ -82,12 +83,11 @@ public class ReservationController {
             Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
 
             if (reservation.isPresent()) {
-                if(!Objects.equals(reservation.get().getUtilisateur().getId(), utilisateur.getId())) {
+                if (!Objects.equals(reservation.get().getUtilisateur().getId(), utilisateur.getId())) {
                     redirectAttributes.addFlashAttribute("error", "Impossible de modifier cette réservation");
                     return "redirect:/reservations";
-                } else if(reservation.get().getFacture() != null) {
-                    redirectAttributes.addFlashAttribute("error", "Impossible de modifier une " +
-                            "réservation déjà payée.");
+                } else if (reservation.get().getFacture() != null) {
+                    redirectAttributes.addFlashAttribute("error", "Impossible de modifier une " + "réservation déjà payée.");
                     return "redirect:/reservations";
                 }
                 model.addAttribute("reservation", reservation.get());
@@ -129,7 +129,7 @@ public class ReservationController {
 
             if (prix == 0) {
                 redirectAttributes.addFlashAttribute("error", "Vous ne pouvez pas louer un véhicule au delà de 31 jours");
-                return "redirect:/reservations/edit/"+reservationOptional.get().getId();
+                return "redirect:/reservations/edit/" + reservationOptional.get().getId();
             }
 
             reservation.setPrix(prix);
@@ -150,23 +150,20 @@ public class ReservationController {
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes, Principal principal) {
         Optional<Reservation> reservation = this.reservationService.findById(id);
         Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
-        try{
+        try {
             if (!Objects.equals(reservation.get().getUtilisateur().getId(), utilisateur.getId())) {
-                redirectAttributes.addFlashAttribute("error", "Vous ne pouvez pas supprimer " +
-                        "une réservation qui n'est pas la vôtre.");
+                redirectAttributes.addFlashAttribute("error", "Vous ne pouvez pas supprimer " + "une réservation qui n'est pas la vôtre.");
                 return "redirect:/reservations";
             }
-            if(reservation.get().getFacture() == null) {
+            if (reservation.get().getFacture() == null) {
                 this.reservationService.deleteById(reservation.get().getId());
             } else {
-                redirectAttributes.addFlashAttribute("error", "Impossible de supprimer une " +
-                        "réservation déjà payée.");
+                redirectAttributes.addFlashAttribute("error", "Impossible de supprimer une " + "réservation déjà payée.");
                 return "redirect:/reservations";
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de " +
-                    "la suppression de la réservation");
+            redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de " + "la suppression de la réservation");
             return "redirect:/reservations";
         }
         redirectAttributes.addFlashAttribute("success", "Votre réservation a été supprimée avec succès");
@@ -181,8 +178,12 @@ public class ReservationController {
         Vehicule vehicule = this.vehiculeService.findById(reservation.getVehicule().getId()).orElseThrow();
         Long vehiculeId = reservation.getVehicule().getId();
 
-        try {
+        if (!vehicule.isDisponible()) {
+            redirectAttributes.addFlashAttribute("error", "Impossible de louer un véhicule indisponible.");
+            return "redirect:/vehicules/" + vehicule.getId();
+        }
 
+        try {
             if (!utilisateur.isVerified() || !utilisateur.isVerifiedByAdmin()) {
                 redirectAttributes.addFlashAttribute("error", "Votre compte doit être vérifié pour effectuer cette action.");
                 return "redirect:/vehicules/" + vehiculeId;
@@ -211,8 +212,7 @@ public class ReservationController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            model.addAttribute("error", "Une erreur est survenue lors de " +
-                    "la création de la réservation: " + e.getMessage());
+            model.addAttribute("error", "Une erreur est survenue lors de " + "la création de la réservation: " + e.getMessage());
             return "redirect:/vehicules/" + vehiculeId;
         }
     }
@@ -238,8 +238,8 @@ public class ReservationController {
         }
 
         // Calcul du prix en fonction du nombre de jours
-        if(nbJours >31) {
-          return prixHebdo = 0;
+        if (nbJours > 31) {
+            return prixHebdo = 0;
         }
         if (nbJours >= 22) {
             return prixMensuel;

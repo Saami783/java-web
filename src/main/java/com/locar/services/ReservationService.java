@@ -22,8 +22,8 @@ public class ReservationService {
         return reservationRepository.findById(id);
     }
 
-    public Reservation save(Reservation user) {
-        return reservationRepository.save(user);
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
     }
 
     public void deleteById(Long id) {
@@ -32,6 +32,10 @@ public class ReservationService {
 
     public List<Reservation> findByUtilisateurId(Long utilisateurId) {
         return reservationRepository.findByUtilisateurId(utilisateurId);
+    }
+
+    public Optional<Reservation> findByPaymentToken(String paymentToken) {
+        return reservationRepository.findByPaymentToken(paymentToken);
     }
 
 }

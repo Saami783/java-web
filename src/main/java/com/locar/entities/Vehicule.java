@@ -119,10 +119,6 @@ public class Vehicule {
         this.nbCheveaux = nbCheveux;
     }
 
-    public boolean isIsDisponible() {
-        return isDisponible;
-    }
-
     public void setIsDisponible(boolean disponible) {
         this.isDisponible = disponible;
     }
@@ -147,8 +143,7 @@ public class Vehicule {
         return this.tarifs;
     }
 
-    public List<Tarif> addTarifs(Tarif tarif)
-    {
+    public List<Tarif> addTarifs(Tarif tarif) {
         if (!this.tarifs.contains(tarif)) {
             this.tarifs.add(tarif);
         }
@@ -156,8 +151,7 @@ public class Vehicule {
         return this.tarifs;
     }
 
-    public List<Tarif> removeTarifs(Tarif tarif)
-    {
+    public List<Tarif> removeTarifs(Tarif tarif) {
         this.tarifs.remove(tarif);
         return this.tarifs;
     }
@@ -166,8 +160,7 @@ public class Vehicule {
         return this.images;
     }
 
-    public List<VehiculeImages> addImages(VehiculeImages image)
-    {
+    public List<VehiculeImages> addImages(VehiculeImages image) {
         if (!this.images.contains(image)) {
             this.images.add(image);
         }
@@ -175,16 +168,16 @@ public class Vehicule {
         return this.images;
     }
 
-    public List<VehiculeImages> removeImages(VehiculeImages image)
-    {
+    public List<VehiculeImages> removeImages(VehiculeImages image) {
         this.images.remove(image);
         return this.images;
     }
 
-    public Categorie getCategorie() { return categorie; }
+    public Categorie getCategorie() {
+        return categorie;
+    }
 
-    public void setCategorie(Categorie categorie)
-    {
+    public void setCategorie(Categorie categorie) {
         this.categorie = categorie;
     }
 

@@ -9,17 +9,13 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
-    @Autowired
-    private UtilisateurService utilisateurService;
     public static final String[] ENDPOINTS_WHITELIST = {
             "/css/**",
             "/",
@@ -28,22 +24,20 @@ public class SpringSecurityConfig {
             "/register"
     };
     public static final String LOGIN_URL = "/login";
-    public static final String LOGOUT_URL = "/logout";
-    public static final String LOGIN_FAIL_URL = LOGIN_URL + "?error";
-    public static final String DEFAULT_SUCCESS_URL = "/";
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
+
+    @Autowired
+    private UtilisateurService utilisateurService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/admin").hasRole("ADMIN");
-            auth.requestMatchers("/user", "/reservations" , "/reservations/{id}").hasRole("USER");
-            auth.requestMatchers("/reservations/create").hasRole("USER");
-            auth.requestMatchers("/register", "/", "/vehicules", "/vehicules/{id}").permitAll();
-            auth.anyRequest().authenticated();
-        }).formLogin(Customizer.withDefaults()).build();
+                    auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+                    auth.requestMatchers("/user", "/reservations", "/reservations/{id}").hasRole("USER");
+                    auth.requestMatchers("/reservations/create", "paiement/**", "ckeckout/**").hasRole("USER");
+                    auth.requestMatchers("/register", "/", "/vehicules", "/vehicules/{id}", "/uploads/**").permitAll();
+                    auth.anyRequest().authenticated();
+                }).formLogin(Customizer.withDefaults()).build();
     }
 
 

@@ -49,9 +49,12 @@ public class UtilisateurService implements UserDetailsService {
         return new User(user.getUsername(), user.getPassword(), getGrantedAuthorities(user.getRoles()));
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(String role) {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(role));
+    private List<GrantedAuthority> getGrantedAuthorities(String roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String role : roles.split(",")) {
+            authorities.add(new SimpleGrantedAuthority(role.trim()));
+        }
         return authorities;
     }
+
 }

@@ -34,7 +34,7 @@ public class Utilisateur implements UserDetails {
     private List<Reservation> reservations;
 
     public Utilisateur() {
-        this.reservations =  new ArrayList<>();
+        this.reservations = new ArrayList<>();
     }
 
     public Utilisateur(Long id, String roles, String nom, String prenom, String email, String adresse, String codePostal, String ville, String telephone, String password, String permisPath, int age, boolean isVerified, boolean isVerifiedByAdmin) {

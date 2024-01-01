@@ -2,7 +2,9 @@ package com.locar.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Reservation {
@@ -13,6 +15,7 @@ public class Reservation {
     private Date dateFinReservation;
     private int nbJourReserve;
     private float prix;
+    private String paymentToken;
     private Date createdAt;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "utilisateur_id", nullable = false)
@@ -20,15 +23,18 @@ public class Reservation {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "facture_id", referencedColumnName = "id")
     private Facture facture;
-    @OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Avis avis;
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Avis> avisList;
     @ManyToOne
     @JoinColumn(name = "vehicule_id", nullable = false)
     private Vehicule vehicule;
+
     public Reservation() { }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -89,12 +95,12 @@ public class Reservation {
         this.facture = facture;
     }
 
-    public Avis getAvis() {
-        return avis;
+    public List<Avis> getAvisList() {
+        return avisList;
     }
 
-    public void setAvis(Avis avis) {
-        this.avis = avis;
+    public void setAvisList(List<Avis> avisList) {
+        this.avisList = avisList;
     }
 
     public Vehicule getVehicule() {
@@ -103,6 +109,14 @@ public class Reservation {
 
     public void setVehicule(Vehicule vehicule) {
         this.vehicule = vehicule;
+    }
+
+    public String getPaymentToken() {
+        return paymentToken;
+    }
+
+    public void setPaymentToken(String payement_token) {
+        this.paymentToken = payement_token;
     }
 
     @Override
@@ -116,7 +130,7 @@ public class Reservation {
                 ", createdAt=" + createdAt +
                 ", utilisateur=" + utilisateur +
                 ", facture=" + facture +
-                ", avis=" + avis +
+                ", avis=" + avisList +
 
                 '}';
     }

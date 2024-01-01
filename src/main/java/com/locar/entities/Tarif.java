@@ -13,15 +13,40 @@ public class Tarif {
     @ManyToOne(fetch = FetchType.EAGER)
     private Vehicule vehicule;
 
-    public Tarif() { }
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
-    public String getCalendrier() { return calendrier; }
-    public void setCalendrier(String calendrier) { this.calendrier = calendrier; }
-    public float getPrix() { return prix; }
-    public void setPrix(float prix) { this.prix = prix; }
-    public int getKm() { return km; }
-    public void setKm(int km) { this.km = km; }
+    public Tarif() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getCalendrier() {
+        return calendrier;
+    }
+
+    public void setCalendrier(String calendrier) {
+        this.calendrier = calendrier;
+    }
+
+    public float getPrix() {
+        return prix;
+    }
+
+    public void setPrix(float prix) {
+        this.prix = prix;
+    }
+
+    public int getKm() {
+        return km;
+    }
+
+    public void setKm(int km) {
+        this.km = km;
+    }
 
     @Override
     public String toString() {
@@ -29,6 +54,6 @@ public class Tarif {
                 "id=" + id +
                 ", calendrier='" + calendrier + '\'' +
                 ", prix=" + prix +
-                ", km=" + km ;
+                ", km=" + km;
     }
 }

@@ -4,6 +4,7 @@ import com.locar.dao.UtilisateurRepository;
 import com.locar.dao.VehiculeRepository;
 import com.locar.entities.Utilisateur;
 import com.locar.entities.Vehicule;
+import com.locar.services.VehiculeService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,10 +19,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/")
 public class Main {
-    private final VehiculeRepository vehiculeRepository;
+    private final VehiculeService vehiculeService;
 
-    public Main(VehiculeRepository vehiculeRepository) {
-        this.vehiculeRepository = vehiculeRepository;
+    public Main(VehiculeService vehiculeService) {
+        this.vehiculeService = vehiculeService;
     }
 
     public static void main(String[] args) {
@@ -30,7 +31,7 @@ public class Main {
 
     @GetMapping
     public String home(Model model) {
-        List<Vehicule> vehicules = vehiculeRepository.findAll();
+        List<Vehicule> vehicules = vehiculeService.findAll();
 
         model.addAttribute("vehicules", vehicules);
         return "home";

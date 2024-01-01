@@ -2,16 +2,17 @@ package com.locar.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-
 @Entity
 public class Avis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
+
+
 
     public Reservation getReservation() {
         return reservation;
@@ -25,6 +26,8 @@ public class Avis {
     private int note;
 
     public Avis() { }
+
+
 
     public String getCommentaire() {
         return commentaire;

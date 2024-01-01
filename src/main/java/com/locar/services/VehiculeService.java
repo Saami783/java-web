@@ -23,8 +23,8 @@ public class VehiculeService {
         return vehiculeRepository.findById(id);
     }
 
-    public Vehicule save(Vehicule user) {
-        return vehiculeRepository.save(user);
+    public Vehicule save(Vehicule vehicule) {
+        return vehiculeRepository.save(vehicule);
     }
 
     public void deleteById(Long id) {
