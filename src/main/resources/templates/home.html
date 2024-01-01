@@ -8,6 +8,7 @@
 <body>
 
 <section layout:fragment="content">
+    <br><br><br><br>
     <h1>Liste des Véhicules</h1>
     <div th:each="vehicule : ${vehicules}">
         <h2><a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}"> Détail du véhicule</a></h2>

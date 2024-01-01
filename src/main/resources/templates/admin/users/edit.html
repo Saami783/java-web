@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Modifier Utilisateur</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
 </head>
 <body>
-$END$
+<section layout:fragment="content">
+    <div class="container mt-5">
+        <h2 class="mb-4">Modifier Utilisateur</h2>
+        <form th:action="@{/admin/users/edit/{id}(id=${utilisateur.id})}" th:object="${utilisateur}" method="post" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom:</label>
+                <input type="text" id="nom" th:field="*{nom}" class="form-control" required>
+                <div class="invalid-feedback">
+                    Le nom est requis.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="prenom" class="form-label">Prénom:</label>
+                <input type="text" id="prenom" th:field="*{prenom}" class="form-control" required>
+                <div class="invalid-feedback">
+                    Le prénom est requis.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" required>
+                <div class="invalid-feedback">
+                    Un e-mail valide est requis.
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="telephone" class="form-label">Téléphone:</label>
+                <input type="tel" id="telephone" th:field="*{telephone}" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="verified" class="form-label">Email Vérifié:</label>
+                <select id="verified" th:field="*{verified}" class="form-select">
+                    <option value="true">Oui</option>
+                    <option value="false">Non</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="verifiedByAdmin" class="form-label">Vérifié par Admin:</label>
+                <select id="verifiedByAdmin" th:field="*{verifiedByAdmin}" class="form-select">
+                    <option value="true">Oui</option>
+                    <option value="false">Non</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        </form>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</section>
 </body>
 </html>

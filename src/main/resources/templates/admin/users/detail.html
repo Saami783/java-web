@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title th:text="${pageTitle}">Détail de l'Utilisateur</title>
 </head>
 <body>
-$END$
+
+<section layout:fragment="content">
+
+    <br><br><br><br>
+    <h1>Détail de l'Utilisateur</h1>
+    <br>
+    <div class="user-detail">
+        <h2 th:text="${utilisateur.nom + ' ' + utilisateur.prenom}">Nom et Prénom</h2>
+        <p><strong>Email:</strong> <span th:text="${utilisateur.email}"></span></p>
+        <p><strong>Téléphone:</strong> <span th:text="${utilisateur.telephone}"></span></p>
+        <p><strong>Email Vérifié:</strong> <span th:text="${utilisateur.verified ? 'Oui' : 'Non'}"></span></p>
+        <p><strong>Vérifié par Admin:</strong> <span th:text="${utilisateur.verifiedByAdmin ? 'Oui' : 'Non'}"></span></p>
+
+        <!-- Boutons d'action -->
+        <div class="action-buttons">
+            <a th:href="@{/admin/users/edit/{id}(id=${utilisateur.id})}" class="btn btn-primary">Modifier</a>
+            <a th:href="@{/admin/users}" class="btn btn-secondary">Retour</a>
+        </div>
+    </div>
+
+</section>
+
 </body>
 </html>

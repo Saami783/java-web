@@ -7,13 +7,15 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Configuration
 public class ThymeleafConfiguration {
 
-      @Bean
-      public ClassLoaderTemplateResolver pdfTemplateResolver() {
-         ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
-         resolver.setSuffix(".html");
-         resolver.setTemplateMode("HTML5");
-         resolver.setCharacterEncoding("UTF-8");
-         resolver.setOrder(1);
-         return resolver;
-      }
+    @Bean
+    public ClassLoaderTemplateResolver templateResolver() {
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        resolver.setPrefix("templates/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setCheckExistence(true);
+        return resolver;
+    }
+
 }

@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title th:text="${pageTitle}">Admin</title>
 </head>
 <body>
-$END$
+
+<section layout:fragment="content">
+
+    <br><br><br><br>
+    <h1>Liste des utilisateurs</h1>
+
+    <br>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom & Prenom</th>
+            <th scope="col">Email</th>
+            <th scope="col">Numéro de téléphone</th>
+            <th scope="col">Email vérifié </th>
+            <th scope="col">Vérifié par un admin </th>
+        </tr>
+        </thead>
+        <tbody>
+        <div th:each="utilisateur : ${utilisateurs}">
+            <tr>
+                <th scope="row" th:text="${utilisateur.id}">Id</th>
+                <td th:text="${utilisateur.nom + ' ' + utilisateur.prenom}">Nom et prenom</td>
+                <td><a th:href="@{/admin/users/{id}(id=${utilisateur.id})}" th:text="${utilisateur.email}"> Détail de l'utilisateur</a></td>
+                <td th:text="${utilisateur.telephone}">Numero de telephone</td>
+                <td th:text="${utilisateur.verified}">Email vérifié</td>
+                <td th:text="${utilisateur.verifiedByAdmin}">Vérifié par un admin</td>
+                <td class="actions actions-as-dropdown">
+                    <div class="dropdown dropdown-actions">
+                        <a class="dropdown-toggle-no-caret" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                            <svg xmlns="http://www.w3.org/2000/svg" height="21" width="21" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path>
+                            </svg>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" style="">
+                            <a class="dropdown-item action-detail" th:href="@{/admin/users/{id}(id=${utilisateur.id})}" th:text="'Consulter'" data-action-name="detail"><span class="action-label">Consulter</span></a>
+
+                            <a class="dropdown-item action-edit" th:href="@{/admin/users/edit/{id}(id=${utilisateur.id})}" th:text="'Modifier'" data-action-name="edit"><span class="action-label">Modifier</span></a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+
+</section>
+
 </body>
 </html>
+

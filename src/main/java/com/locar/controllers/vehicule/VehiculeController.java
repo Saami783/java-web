@@ -1,6 +1,5 @@
 package com.locar.controllers.vehicule;
 
-import com.locar.dao.VehiculeRepository;
 import com.locar.entities.Reservation;
 import com.locar.entities.Vehicule;
 import com.locar.services.VehiculeService;

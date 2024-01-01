@@ -26,10 +26,14 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "vehicule_id", nullable = false)
     private Vehicule vehicule;
-    public Reservation() { }
+
+    public Reservation() {
+    }
+
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }

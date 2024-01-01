@@ -9,7 +9,7 @@ public class Facture {
     private long id;
 
     private float montantTotal;
-    private boolean isPaid;
+
     @OneToOne(mappedBy = "facture", fetch = FetchType.LAZY)
     private Reservation reservation;
 
@@ -29,14 +29,6 @@ public class Facture {
         this.montantTotal = montantTotal;
     }
 
-    public boolean isPaid() {
-        return isPaid;
-    }
-
-    public void setPaid(boolean paid) {
-        isPaid = paid;
-    }
-
     public Reservation getReservation() {
         return reservation;
     }
@@ -46,7 +38,6 @@ public class Facture {
         return "Facture{" +
                 "id=" + id +
                 ", montantTotal=" + montantTotal +
-                ", isPaid=" + isPaid +
                 ", reservation=" + reservation +
                 '}';
     }

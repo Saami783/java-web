@@ -2,8 +2,6 @@ package com.locar.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-
 @Entity
 public class Avis {
     @Id
@@ -13,7 +11,8 @@ public class Avis {
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
-    public Avis() { }
+    public Avis() {
+    }
 
     @Override
     public String toString() {

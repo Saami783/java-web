@@ -1,65 +1,92 @@
 package com.locar.controllers.pdf;
 
-import com.locar.entities.Facture;
-import com.locar.entities.Reservation;
-import com.locar.entities.Vehicule;
-import com.locar.entities.Tarif;
-import com.locar.services.FactureService;
+import com.locar.entities.*;
+import com.locar.exceptions.UnauthorizedAccessException;
 import com.locar.services.PdfService;
 import com.locar.services.ReservationService;
-import com.locar.services.VehiculeService;
 import com.locar.services.TarifService;
+import com.locar.services.UtilisateurService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.context.Context;
-import jakarta.servlet.http.HttpServletResponse;
-import java.util.Optional;
+
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/facture/pdf")
 public class FactureController {
 
     @Autowired
-    private PdfService pdfService;
+    private final PdfService pdfService;
 
     @Autowired
-    private FactureService factureService;
+    private final ReservationService reservationService;
 
     @Autowired
-    private ReservationService reservationService;
+    private final TarifService tarifService;
 
     @Autowired
-    private VehiculeService vehiculeService;
+    private final UtilisateurService utilisateurService;
 
-    @Autowired
-    private TarifService tarifService;
+    public FactureController(PdfService pdfService, ReservationService reservationService,
+                             TarifService tarifService, UtilisateurService utilisateurService) {
+        this.pdfService = pdfService;
+        this.reservationService = reservationService;
+        this.tarifService = tarifService;
+        this.utilisateurService = utilisateurService;
+    }
 
     @GetMapping("/{id}")
-    public @ResponseBody void getFactureAsPdf(@PathVariable Long id, HttpServletResponse response) {
-        Optional<Facture> factureOpt = factureService.findById(id);
+    public @ResponseBody void getFactureAsPdf(@PathVariable Long id, HttpServletResponse response, Principal principal) {
+        Optional<Reservation> reservationOpt = reservationService.findById(id);
+        Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
+        byte[] bytes = null;
 
-        if (!factureOpt.isPresent()) {
+        if (!reservationOpt.isPresent()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
-        Facture facture = factureOpt.get();
-        Reservation reservation = facture.getReservation();
+        Reservation reservation = reservationOpt.get();
+        Facture facture = reservation.getFacture();
+
+        if (!Objects.equals(reservation.getUtilisateur().getId(), utilisateur.getId())) {
+            throw new UnauthorizedAccessException("L'utilisateur n'est pas autorisé à accéder à cette facture.");
+        }
+
         Vehicule vehicule = reservation.getVehicule();
         List<Tarif> tarifs = tarifService.findByVehicule(vehicule);
 
+        Tarif tarif = new Tarif();
+        for (Tarif tarifLoop : tarifs) {
+            if (Objects.equals(tarifLoop.getCalendrier(), "Jour")) {
+                tarif = tarifLoop;
+                break;
+            }
+        }
+
         Context context = new Context();
-        context.setVariable("facture", facture);
         context.setVariable("reservation", reservation);
         context.setVariable("vehicule", vehicule);
-        context.setVariable("tarifs", tarifs);
+        context.setVariable("tarif", tarif);
 
-        byte[] bytes = pdfService.generatePdf("factureTemplate", context);
+        if (facture != null) {
+            context.setVariable("facture", facture);
+            bytes = pdfService.generatePdf("pdf/facture/home", context);
+        } else {
+            bytes = pdfService.generatePdf("pdf/devis/home", context);
+        }
 
         response.setContentType("application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=facture_" + id + ".pdf");
+        response.setHeader("Content-Disposition", "inline; filename=facture_" + reservation.getId() + ".pdf");
 
         try {
             response.getOutputStream().write(bytes);
@@ -68,4 +95,5 @@ public class FactureController {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
+
 }

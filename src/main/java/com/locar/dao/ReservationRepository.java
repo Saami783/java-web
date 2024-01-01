@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findByUtilisateurId(Long utilisateurId);
-    public Optional<Reservation> findByPaymentToken(String paymentToken);
+    Optional<Reservation> findByPaymentToken(String paymentToken);
 }

@@ -46,8 +46,7 @@ public class UtilisateurController {
 
     @PostMapping("/{id}")
     public String updateUser(@PathVariable Long id, @ModelAttribute Utilisateur userDetails) {
-        Utilisateur user = utilisateurService.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
+        Utilisateur user = utilisateurService.findById(id).orElseThrow(() -> new RuntimeException("User not found with id " + id));
         user.setNom(userDetails.getNom());
         user.setEmail(userDetails.getEmail());
         utilisateurService.save(user);

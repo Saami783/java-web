@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Entity
 public class Categorie {
 
@@ -17,6 +18,7 @@ public class Categorie {
     public Categorie() {
         this.vehicules = new ArrayList<>();
     }
+
     public long getId() {
         return id;
     }

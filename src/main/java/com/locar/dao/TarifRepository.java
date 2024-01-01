@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TarifRepository extends JpaRepository<Tarif, Long>  {
 
-    public List<Tarif> findByVehicule(Vehicule vehicule);
+    List<Tarif> findByVehicule(Vehicule vehicule);
 }
