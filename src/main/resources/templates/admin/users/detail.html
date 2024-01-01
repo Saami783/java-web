@@ -19,7 +19,9 @@
         <p><strong>Email Vérifié:</strong> <span th:text="${utilisateur.verified ? 'Oui' : 'Non'}"></span></p>
         <p><strong>Vérifié par Admin:</strong> <span th:text="${utilisateur.verifiedByAdmin ? 'Oui' : 'Non'}"></span></p>
 
-        <!-- Boutons d'action -->
+        <img th:src="@{'/' + ${utilisateur.permisPath}}" alt="Permis de conduire"/>
+
+
         <div class="action-buttons">
             <a th:href="@{/admin/users/edit/{id}(id=${utilisateur.id})}" class="btn btn-primary">Modifier</a>
             <a th:href="@{/admin/users}" class="btn btn-secondary">Retour</a>

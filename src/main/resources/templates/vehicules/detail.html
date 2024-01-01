@@ -31,6 +31,7 @@
         <p th:text="${error}">Message d'erreur</p>
     </div>
 
+
     <div th:unless="${vehicule.disponible}">
         <p class="alert alert-info">Ce véhicule n'est actuellement pas disponible pour la réservation.</p>
     </div>

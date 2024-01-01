@@ -47,14 +47,6 @@ public class VehiculeController {
         if (vehiculeOpt.isPresent()) {
             List<Avis> avisList = avisService.findAvisByVehiculeId(id);
 
-            for(Avis avis : avisList) {
-                System.out.println(avis);
-            }
-
-            System.exit(0);
-
-
-
             Reservation reservationForm = new Reservation();
 
             Avis avisForm = new Avis();

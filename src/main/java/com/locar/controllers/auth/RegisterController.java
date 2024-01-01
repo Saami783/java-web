@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/register")
@@ -49,57 +50,62 @@ public class RegisterController {
     public String processSignup(Utilisateur utilisateur,
                                 @RequestParam("permis") MultipartFile permisFile,
                                 RedirectAttributes redirectAttributes) {
-        // Check if the uploaded file is not empty
-        if (permisFile.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Veuillez remplir le champs de permis de conduire.");
+
+        String fileUploadError = validateAndUploadFile(permisFile, utilisateur);
+        if (fileUploadError != null) {
+            redirectAttributes.addFlashAttribute("error", fileUploadError);
             return "redirect:/register";
         }
 
-        // Validate the file type (make sure it's either jpg or png)
-        String mimeType = permisFile.getContentType();
-        String originalFileName = permisFile.getOriginalFilename().toLowerCase();
-        boolean isImage = mimeType != null && (mimeType.equals("image/jpeg") || mimeType.equals("image/png"));
+        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+        utilisateur = utilisateurService.save(utilisateur);
+
+        return "redirect:/login";
+    }
+
+    private String validateAndUploadFile(MultipartFile file, Utilisateur utilisateur) {
+        if (file.isEmpty()) {
+            return "Veuillez remplir le champ de permis de conduire.";
+        }
+
+        String mimeType = file.getContentType();
+        String originalFileName = file.getOriginalFilename();
+        if (originalFileName == null || mimeType == null) {
+            return "Impossible de lire le nom de fichier ou le type MIME.";
+        }
+
+        originalFileName = originalFileName.toLowerCase();
+        boolean isImage = mimeType.equals("image/jpeg") || mimeType.equals("image/png");
         boolean isValidExtension = originalFileName.endsWith(".jpg") || originalFileName.endsWith(".jpeg") || originalFileName.endsWith(".png");
 
         if (!isImage || !isValidExtension) {
-            redirectAttributes.addFlashAttribute("error", "L'extension de votre permis de conduire n'est pas valide.");
-            return "redirect:/register";
+            return "L'extension de votre permis de conduire n'est pas valide.";
         }
-
-        // Encrypt the user's password
-        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-
-        // Save the user to generate the ID
-        utilisateur.setPermisPath(originalFileName);
-        utilisateur = utilisateurService.save(utilisateur);
-
-        // Construct the file path using the user ID
-        String directoryPath = "src\\main\\resources\\static\\uploads\\permis\\users\\" + utilisateur.getId();
-        Path directory = Paths.get(directoryPath);
-        System.out.println(directoryPath);
 
         try {
+            // Génération d'une chaîne aléatoire de 20 caractères maximum
+            String randomDirName = UUID.randomUUID().toString().replace("-", "").substring(0, 20);
+
+            String directoryPath = "src\\main\\resources\\static\\uploads\\permis\\users\\" + randomDirName;
+            Path directory = Paths.get(directoryPath);
             if (!Files.exists(directory)) {
-                Files.createDirectories(directory); // Create directory if it doesn't exist
+                Files.createDirectories(directory);
             }
 
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(permisFile.getOriginalFilename()));
-            Path filePath = directory.resolve(fileName);
-            Files.copy(permisFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
+            Path filePath = directory.resolve(uniqueFileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Set the file path in the 'permisPath' attribute of the 'Utilisateur' entity
-            utilisateur.setPermisPath(filePath.toString());
+            utilisateur.setPermisPath("src\\main\\resources\\static\\uplGIoads\\permis\\users\\" + randomDirName + "\\" + uniqueFileName);
 
-            // Update the user entity to save the file path in the database
-            utilisateurService.save(utilisateur);
         } catch (IOException e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de l'enregistrement du fichier.");
-            return "redirect:/register"; // Ensure this is the correct redirect on error
+            return "Une erreur est survenue lors de l'enregistrement du fichier.";
         }
 
-        // Redirect to the login page after successful registration
-        return "redirect:/login"; // Or redirect to an appropriate success page
+        return null;
     }
+
+
 
 }
