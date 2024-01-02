@@ -10,6 +10,27 @@
 <section layout:fragment="content">
     <br><br><br><br>
     <h1>Liste des Véhicules</h1>
+
+    <div style="display: flex;width: 100% !important;align-content: center;justify-content: center;gap:20px;">
+        <div class="container text-center">
+            <div class="row row-cols-md-3">
+                <div class="card" style="width: 18rem;" th:each="vehicule : ${vehicules}">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title" th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" class="btn btn-primary" th:text="${vehicule.modele}"> Détail du véhicule</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     <div th:each="vehicule : ${vehicules}">
         <h2><a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}"> Détail du véhicule</a></h2>
         <p>Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
