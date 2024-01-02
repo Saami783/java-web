@@ -7,11 +7,16 @@ import com.locar.entities.Vehicule;
 import com.locar.services.VehiculeService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.ViewResolver;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.util.List;
 
@@ -36,6 +41,7 @@ public class Main {
         model.addAttribute("vehicules", vehicules);
         return "home";
     }
+
 
 
 }

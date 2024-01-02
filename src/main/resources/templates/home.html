@@ -1,15 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}">
+      layout:decorate="~{layouts/base}"><
+<!--
 <head>
     <title th:text="${pageTitle}">Page d'Accueil</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/assets/images/favicon.png">
+
+
+    <link href="/public/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+
+    <link href="/public/assets/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet" type="text/css"/>
+
+    <link href="/public/assets/vendor/swiper/css/swiper-bundle.min.css" rel="stylesheet" type="text/css"/>
+
+    <link href="/public/assets/css/style.css" rel="stylesheet" type="text/css"/>
+</head> -->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Autixir - Car Services and Auto Mechanic HTML Template</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Place favicon.png in the root directory -->
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon" />
+    <!-- Font Icons css -->
+    <link rel="stylesheet" href="/ccss/font-icons.css">
+    <!-- plugins css -->
+    <link rel="stylesheet" href="/css/plugins.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- Responsive css -->
+    <link rel="stylesheet" href="/css/responsive.css">
 </head>
 <body>
 
 <section layout:fragment="content">
     <br><br><br><br>
+
+
     <h1>Liste des Véhicules</h1>
+
+    <div style="display: flex;width: 100% !important;align-content: center;justify-content: center;gap:20px;">
+        <div class="container text-center">
+            <div class="row row-cols-md-3">
+                <div class="card" style="width: 18rem;" th:each="vehicule : ${vehicules}">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title" th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" class="btn btn-primary" th:text="${vehicule.modele}"> Détail du véhicule</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     <div th:each="vehicule : ${vehicules}">
         <h2><a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}"> Détail du véhicule</a></h2>
         <p>Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
@@ -25,6 +79,10 @@
     </div>
 </section>
 
+
+<script src="/assets/js/plugins.js"></script>
+<!-- Main JS -->
+<script src="/assets/js/main.js"></script>
 </body>
 </html>
 
