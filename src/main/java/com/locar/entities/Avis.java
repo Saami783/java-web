@@ -13,10 +13,8 @@ public class Avis {
     @ManyToOne
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
-
     private String commentaire;
     private int note;
-
     private Date publishedAt;
 
     public Avis() { }

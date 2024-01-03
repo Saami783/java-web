@@ -13,17 +13,12 @@ create table utilisateur (
     is_verified_by_admin boolean default false,
     permis_path varchar(255) not null,
     age int(2) not null,
-    reservation_id int default NULL,
-    created_at Datetime default CURRENT_TIMESTAMP,
-    updated_at Datetime default CURRENT_TIMESTAMP,
-    FOREIGN KEY (reservation_id) REFERENCES reservation(id)
+    created_at Datetime default CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 create table categorie (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    libelle varchar(255) not null,
-    created_at Datetime default CURRENT_TIMESTAMP,
-    updated_at Datetime default CURRENT_TIMESTAMP
+    libelle varchar(255) not null
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 create table vehicule (
@@ -43,7 +38,6 @@ create table vehicule (
     categorie_id int not null,
 	folder varchar(100) not null,
     created_at Datetime default CURRENT_TIMESTAMP,
-    updated_at Datetime default CURRENT_TIMESTAMP,
     FOREIGN KEY (categorie_id) REFERENCES categorie(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -51,16 +45,13 @@ create table vehicule_images (
 	id INT AUTO_INCREMENT PRIMARY key,
 	vehicule_id int not null,
 	image_path varchar(255) not null,
-	created_at Datetime default CURRENT_TIMESTAMP,
-	updated_at Datetime default CURRENT_TIMESTAMP,
 	FOREIGN KEY (vehicule_id) REFERENCES vehicule(id)
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 	
 create table facture (
     id INT AUTO_INCREMENT PRIMARY KEY,
     montant_total decimal(7,2) not null,
-    created_at Datetime default CURRENT_TIMESTAMP,
-    updated_at Datetime default CURRENT_TIMESTAMP
+    created_at Datetime default CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     
 create table reservation (
@@ -74,7 +65,6 @@ create table reservation (
     vehicule_id int not null,
     facture_id int default NULL,
     created_at Datetime default CURRENT_TIMESTAMP,
-    updated_at Datetime default CURRENT_TIMESTAMP,
     foreign key (utilisateur_id) references utilisateur(id),
     foreign key (vehicule_id) references vehicule(id),
     foreign key (facture_id) references facture(id) ON DELETE CASCADE
@@ -85,8 +75,8 @@ create table tarif (
     calendrier varchar(50) not null,
     prix decimal(7,2) not null,
     km int(100) not null,
-    created_at Datetime default CURRENT_TIMESTAMP,
-    updated_at Datetime default CURRENT_TIMESTAMP,
+    vehicule_id int not null,
+    foreign key (vehicule_id) references vehicule(id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
     
 create table avis (

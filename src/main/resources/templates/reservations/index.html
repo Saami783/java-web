@@ -8,59 +8,65 @@
 <body>
     <section layout:fragment="content">
         <br><br><br><br>
-    <h1>Mes réservations </h1>
-        <br><br>
-        <div class="alert alert-danger" th:if="${error}">
-            <p th:text="${error}">Message d'erreur</p>
-        </div>
-        <div class="alert alert-success" th:if="${success}">
-            <p th:text="${success}">Message de succès</p>
-        </div>
-
-    <div th:each="reservation : ${reservations}">
-        <h2><a th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Détail de la réservation</a></h2>
-        <p>
-            <a th:href="@{/vehicules/{id}(id=${reservation.vehicule.id})}"
-               th:text="'Vehicule : ' + ${reservation.vehicule.categorie.libelle + ' ' + reservation.vehicule.modele}"> Détail de la réservation</a>
-        </p>
-        <p>Prix total: <span th:text="${reservation.prix}+ '€'">Prix total :</span></p>
-        <p>Début de la location : <span th:text="${#dates.format(reservation.dateDebutReservation, 'dd-MMM-yyyy')}"> </span></p>
-        <p>Fin de la location : <span th:text="${#dates.format(reservation.dateFinReservation, 'dd-MMM-yyyy')}"> </span> </p>
-        <p>Jours total : <span th:text="${reservation.nbJourReserve}+ 'jours'">Prix total :</span></p>
-        <p>Réservation effectué le : <span th:text="${#dates.format(reservation.createdAt, 'dd-MMM-yyyy')}"> </span></p>
 
         <div class="container">
-            <div class="row">
-                <div class="col col-2">
-                    <h2>
-                        <a class="btn btn-info" th:href="@{/facture/pdf/{id}(id=${reservation.id})}"
-                           th:text="${reservation.facture == null ? 'Devis' : 'Facture'} + ' en PDF'">Facture en PDF</a>
-                    </h2>
-                </div>
-                <div class="col col-2">
-                    <h2 th:unless="${reservation.facture}">
-                        <a class="btn btn-success" th:href="@{/paiement/stripe/{id}(id=${reservation.id})}" th:text="'Payer'">Payer</a>
-                    </h2>
-                </div>
-                <div class="col col-2">
-                    <h2>
-                        <a class="btn btn-primary" th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Plus de détails'">Plus de détails</a>
-                    </h2>
-                </div>
-                <div class="col col-2">
-                    <h2 th:unless="${reservation.facture}">
-                        <a class="btn btn-info" th:href="@{/reservations/edit/{id}(id=${reservation.id})}" th:text="'Modifier'">Modifier</a>
-                    </h2>
-                </div>
-                <div class="col col-2">
-                    <h2 th:unless="${reservation.facture}">
-                        <a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a>
-                    </h2>
-                </div>
-                </div>
+
+            <h1>Mes réservations </h1>
+            <br><br>
+            <div class="alert alert-danger" th:if="${error}">
+                <p th:text="${error}">Message d'erreur</p>
             </div>
-        <hr>
-    </div>
+            <div class="alert alert-success" th:if="${success}">
+                <p th:text="${success}">Message de succès</p>
+            </div>
+
+            <div th:each="reservation : ${reservations}">
+                <h2><a th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Détail de la réservation</a></h2>
+                <p>
+                    <a th:href="@{/vehicules/{id}(id=${reservation.vehicule.id})}"
+                       th:text="'Vehicule : ' + ${reservation.vehicule.categorie.libelle + ' ' + reservation.vehicule.modele}"> Détail de la réservation</a>
+                </p>
+                <p>Prix total: <span th:text="${reservation.prix}+ '€'">Prix total :</span></p>
+                <p>Début de la location : <span th:text="${#dates.format(reservation.dateDebutReservation, 'dd-MMM-yyyy')}"> </span></p>
+                <p>Fin de la location : <span th:text="${#dates.format(reservation.dateFinReservation, 'dd-MMM-yyyy')}"> </span> </p>
+                <p>Jours total : <span th:text="${reservation.nbJourReserve}+ 'jours'">Prix total :</span></p>
+                <p>Réservation effectué le : <span th:text="${#dates.format(reservation.createdAt, 'dd-MMM-yyyy')}"> </span></p>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col col-2">
+                            <h2>
+                                <a class="btn btn-info" th:href="@{/facture/pdf/{id}(id=${reservation.id})}"
+                                   th:text="${reservation.facture == null ? 'Devis' : 'Facture'} + ' en PDF'">Facture en PDF</a>
+                            </h2>
+                        </div>
+                        <div class="col col-2">
+                            <h2 th:unless="${reservation.facture}">
+                                <a class="btn btn-success" th:href="@{/paiement/stripe/{id}(id=${reservation.id})}" th:text="'Payer'">Payer</a>
+                            </h2>
+                        </div>
+                        <div class="col col-2">
+                            <h2>
+                                <a class="btn btn-primary" th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Plus de détails'">Plus de détails</a>
+                            </h2>
+                        </div>
+                        <div class="col col-2">
+                            <h2 th:unless="${reservation.facture}">
+                                <a class="btn btn-info" th:href="@{/reservations/edit/{id}(id=${reservation.id})}" th:text="'Modifier'">Modifier</a>
+                            </h2>
+                        </div>
+                        <div class="col col-2">
+                            <h2 th:unless="${reservation.facture}">
+                                <a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+        </div>
+
     </section>
 </body>
 
