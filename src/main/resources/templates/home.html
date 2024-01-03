@@ -4,85 +4,833 @@
       layout:decorate="~{layouts/base}">
 <head>
     <title th:text="${pageTitle}">Page d'Accueil</title>
-<!--    <link rel="stylesheet" href="../"-->
+    <style>
+        /* Style par défaut pour les mobiles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+            font-family: Inter, system-ui;
+        }
+
+        header {
+            position: relative;
+            z-index: 2;
+        }
+
+        #left-section {
+            display: block;
+            background-image: url("../../public/img/homepage-mobile.png");
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            left: 0;
+            top: -72px;
+        }
+
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+        }
+
+        .overlay-text h1 {
+            font-size: 2em; /* Ajustez cette valeur en fonction de vos besoins */
+        }
+
+
+        .custom-button {
+            display: inline-block;
+            text-align: center;
+            padding: 10px 20px; /* Ajustez à votre convenance pour changer la taille du bouton */
+            font-size: 1em; /* Ajustez la taille du texte dans le bouton */
+            color: #ffffff; /* Couleur du texte */
+            background-color: #000000; /* Couleur du fond */
+            border-radius: 25px; /* Arrondi du bouton */
+            text-decoration: none; /* Enlève le soulignage du lien */
+            transition: background-color 0.3s ease; /* Animation au survol */
+        }
+
+        .custom-button:hover {
+            background-color: #333333; /* Change la couleur du fond au survol */
+        }
+
+        .custom-button:active {
+            color: #ffffff; /* Couleur du texte lorsque le lien est cliqué */
+        }
+
+        .custom-button:focus {
+            outline: none; /* Enlève l'outline bleu lorsque le lien est cliqué */
+        }
+
+
+        #right-section {
+            display: none;
+        }
+
+        body.home {
+            background: none;
+        }
+
+        .content {
+            padding: 20px;
+            margin-top: -55px;
+        }
+        /* Titre location de rêve */
+        .content h1 {
+            font-size: 20px;
+            height: 0;
+        }
+        .info-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            width: 50%;
+            margin-bottom: 45px; /* Espace entre les icones en hauteur */
+        }
+
+        .info-item .icon {
+            margin-right: 6px;
+        }
+
+        .info-item p {
+            font-size: 12px; /* Réduit la taille de la police sur mobile */
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .separator-2 {
+            background-color: lightgray;
+            height: 2px;
+            position: absolute;
+            top: 940px; /* remplacer par la distance souhaitée depuis le haut de la page */
+            width: 250px; /* pour que le séparateur prenne toute la largeur de la page */
+            z-index: 1; /* pour que le séparateur apparaisse au-dessus des autres éléments si nécessaire */
+        }
+
+        .separator {
+            margin-left: 35px;
+            width: 90%;
+        }
+
+
+        .cars-container {
+            display: flex; /* Faites défiler les cards horizontalement */
+            overflow-x: auto; /* Permettez le défilement si les cards dépassent la largeur de l'écran */
+            scroll-snap-type: x mandatory; /* Pour un scroll plus fluide */
+            gap: 20px; /* Espace entre les cards */
+            align-items: start;
+        }
+
+        .card {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
+            width: 80vw;  /* ou toute autre valeur qui vous convient */
+            overflow: auto; /* pour gérer le contenu qui dépasse de la hauteur fixe */
+
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.3);
+            color: inherit;
+        }
+
+        .card:hover * {
+            color: inherit;
+        }
+
+        .card:hover .btn-primary {
+            color: #fff; /* Garder la couleur du texte du bouton en blanc lors du survol */
+        }
+
+        .card img {
+            border-radius: 15px;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #333;
+            border-color: #333;
+        }
+
+        .fuel-badge {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            width: fit-content;
+        }
+
+        .fuel-badge h5 {
+            margin: 0 0 0 5px;
+        }
+
+        .electric-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .card-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .overlay-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .delimiter{
+            background-color: #d0caca;
+            height: 1px;
+            width: 75%;
+        }
+
+        .rounded-img {
+            object-fit: cover;
+            width: 100%;
+            height: 200px;
+            border-radius: 20px; /* ajoutez le rayon de bordure que vous voulez */
+        }
+
+        .step-p{
+            color: grey;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .centered {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%; /* pour laisser une petite marge sur les côtés */
+        }
+
+        .plateforme-p{
+            color: white;
+        }
+
+        .avis-container {
+            margin: 0 auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .avis-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .avis-item {
+            background-color: #F0F0F0;
+            flex: 0 0 100%;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border-radius: 20px;
+            padding-top: 25px;
+        }
+
+        .avis-item h4 {
+            font-size: 1.2em;
+            margin-bottom: 0.5rem;
+            word-wrap: break-word;
+            padding-left: 25px;
+        }
+
+        .avis-item p {
+            flex-grow: 1;
+            padding-left: 25px;
+        }
+
+        .avis-span{
+            padding-left: 15px;
+        }
+
+        .avis-stars {
+            margin-top: 10px;
+            padding-left: 25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+
+        #date-avis{
+            padding-left: 172px;
+
+        }
+
+        .star, .star-empty {
+            color: gold;
+            font-size: 1.2em;
+            margin-right: 0.25rem;
+        }
+
+        /* Style pour les grands écrans (desktop) */
+        @media (min-width: 992px){
+
+            body, html{
+                font-family: Inter, ui-sans-serif;
+            }
+            header {
+                height: 100px;
+            }
+
+            #left-section {
+                display: block;
+                background-image: url("../../public/img/homepage.JPG");
+                background-size: cover;
+                background-position: center;
+                border-top-left-radius: 20px;
+                border-bottom-right-radius: 20px;
+                height: 600px; /* Augmente la hauteur de l'image */
+                margin-top: -50px; /* Déplace l'image vers le haut */
+            }
+
+            .overlay-text {
+                display: none;
+            }
+
+            .content {
+                padding: 50px;
+            }
+
+            .agence{
+                margin-top: 50px;
+            }
+            .content h1 {
+                font-size: 36px; /* Augmente la taille de la police sur le bureau */
+                height: 40px;
+            }
+
+            .info-section {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .info-item {
+                display: flex;
+                align-items: center;
+                width: 50%;
+                margin-bottom: 45px;
+            }
+
+            .info-item .icon {
+                margin-right: 10px;
+            }
+
+            .info-item p {
+                font-size: 16px; /* Ajuste la taille de la police sur le bureau */
+            }
+
+            .icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .valign-text-middle {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .heading-2-en-livraison-ou-en-station {
+                color: var(--black);
+                font-family: Inter, system-ui;
+                font-size: 29px;
+                font-weight: 500;
+                height: 35px;
+                letter-spacing: 0;
+                line-height: 38.4px;
+                white-space: nowrap;
+            }
+
+            .retrouvez-votre-agen {
+                height: 54px;
+                letter-spacing: 0;
+                line-height: 27px;
+                margin-top: 20px;
+                min-width: 358px;
+                position: relative;
+            }
+
+            .card {
+                width: 30%;  /* Ajustez cette valeur pour changer la taille de la carte */
+                margin: 0 10px; /* Ajoutez une marge pour espacer les cartes */
+                border-radius: 10px;
+            }
+
+            .cars-container {
+                height: auto; /* Utiliser la hauteur de la vue pour définir la hauteur du conteneur */
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                overflow-x: visible; /* Supprime le défilement sur les grands écrans */
+            }
+
+
+            .card:hover {
+                transform: scale(1.02);
+                box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.3);
+                color: inherit;
+            }
+
+            .card:hover * {
+                color: inherit;
+            }
+
+            .card:hover .btn-primary {
+                color: #fff; /* Garder la couleur du texte du bouton en blanc lors du survol */
+            }
+
+            .card img {
+                border-radius: 15px;
+            }
+
+            .btn-primary {
+                color: #fff;
+                background-color: #333;
+                border-color: #333;
+            }
+
+            .fuel-badge {
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 15px;
+                width: fit-content;
+            }
+
+            .fuel-badge h5 {
+                margin: 0 0 0 5px;
+            }
+
+            .electric-icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            .card-link {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .overlay-button {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 10px;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            .delimiter{
+                background-color: #d0caca;
+                height: 1px;
+                width: 75%;
+            }
+
+            .image-container {
+                position: relative;
+                text-align: center;
+            }
+
+            .image-container .centered {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+            }
+
+            .rounded-img {
+                border-radius: 20px; /* ajoutez le rayon de bordure que vous voulez */
+            }
+
+            .custom-button {
+                display: inline-block;
+                text-align: center;
+                padding: 10px 20px; /* Ajustez à votre convenance pour changer la taille du bouton */
+                font-size: 1em; /* Ajustez la taille du texte dans le bouton */
+                color: #050505; /* Couleur du texte */
+                background-color: #faf9f9; /* Couleur du fond */
+                border-radius: 25px; /* Arrondi du bouton */
+                text-decoration: none; /* Enlève le soulignage du lien */
+                transition: background-color 0.3s ease; /* Animation au survol */
+            }
+
+            .custom-button:hover {
+                background-color: #333333; /* Change la couleur du fond au survol */
+            }
+
+            .custom-button:active {
+                color: #ffffff; /* Couleur du texte lorsque le lien est cliqué */
+            }
+
+            .custom-button:focus {
+                outline: none; /* Enlève l'outline bleu lorsque le lien est cliqué */
+            }
+
+
+
+            .avis-container {
+                margin: 0 auto;
+                max-width: 800px;
+                padding: 0 20px;
+                display: flex; /* Ajout pour aligner les avis sur une seule ligne */
+                flex-wrap: wrap; /* Ajout pour passer à la ligne suivante si nécessaire */
+            }
+
+            .avis-list {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .avis-item {
+                background-color: #F0F0F0;
+                box-sizing: border-box;
+                border-radius: 20px;
+                margin: 10px;
+                flex: 1 0 calc(33.3333% - 20px); /* Ajustement de la propriété flex pour que les avis occupent un tiers de la largeur, moins l'espace de marge */
+            }
+
+            .avis-item h4 {
+                font-size: 1.2em;
+                margin-bottom: 0.5rem;
+                word-wrap: break-word;
+                padding-left: 25px;
+            }
+
+            .avis-item p {
+                flex-grow: 1;
+                padding-left: 25px;
+            }
+
+            .avis-span{
+                padding-left: 15px;
+            }
+
+            .avis-stars {
+                margin-top: 10px;
+                padding-left: 25px;
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            #date-avis{
+                padding-left: 172px;
+            }
+
+            .star, .star-empty {
+                color: gold;
+                font-size: 1.2em;
+                margin-right: 0.25rem;
+            }
+
+
+        }
+
+        /* Pour les laptops (écrans d'au moins 1024px) */
+        @media screen and (min-width: 1024px) and (max-width: 1299px) {
+            #right-section {
+                display: block;
+                background-image: url("../../public/img/map.png");
+                background-size: cover;
+                background-position: center;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                height: 460px;
+                margin-left: 580px;
+                margin-top: -462px;
+            }
+
+        }
+
+        /* Pour les desktops (écrans d'au moins 1300px) */
+        @media screen and (min-width: 1300px) and (max-width: 1399px) {
+            #right-section {
+                display: block;
+                background-image: url("../../public/img/map.png");
+                background-size: cover;
+                background-position: center;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                height: 460px;
+                margin-left: 760px;
+                margin-top: -425px;
+            }
+
+        }
+
+        /* Pour les desktops (écrans d'au moins 1400px) */
+        @media screen and (min-width: 1400px) and (max-width: 1499px) {
+            #right-section {
+                display: block;
+                background-image: url("../../public/img/map.png");
+                background-size: cover;
+                background-position: center;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                height: 460px;
+                margin-left: 718px;
+                margin-top: -425px;
+            }
+
+            #date-avis{
+                padding-right: 70px;
+            }
+        }
+
+        /* Pour les desktops (écrans d'au moins 1500px) */
+        @media screen and (min-width: 1500px) and (max-width: 1999px) {
+            #right-section {
+                display: block;
+                background-image: url("../../public/img/map.png");
+                background-size: cover;
+                background-position: center;
+                border-top-left-radius: 20px;
+                border-bottom-left-radius: 20px;
+                height: 460px;
+                margin-left: 956px;
+                margin-top: -425px;
+            }
+        }
+    </style>
+
 </head>
 <body>
 
-<section layout:fragment="content">
+<br><br><br>
+<div class="row">
+    <div class="col-md-6" id="left-section">
+        <div class="overlay-text">
+            <h1>Votre voiture à la demande</h1>
+            <p>
+                Louez une voiture avec Locar,<br />
+                Et récupérez la en agence.
+            </p>
+            <a href="{{ path('app_show_vehicule') }}" class="custom-button"> Catalogue de véhicules </a>
+        </div>
+    </div>
 
-
-    <br><br><br><br>
-    <!-- Background image -->
-    <div
-            class="p-5 text-center bg-image"
-            style="
-      background-image: url('https://img.freepik.com/free-photo/sports-car-races-through-dark-blurred-motion-generative-ai_188544-12490.jpg?w=1380&t=st=1704233447~exp=1704234047~hmac=93e10e0a53fec44635c934ea2c63307dd4abc31c6f678ac61527103f0984da29');
-      height: 400px;
-      background-size: cover;
-      background-position: center;
-      background-color: rgba(0, 0, 0, 0.6);
-    "
-    >
-        <div class="mask" >
-            <div class="d-flex justify-content-center align-items-center h-100">
-                <div class="text-white">
-                    <h1 class="mb-3">Bienvenue chez Locar</h1>
-                    <h4 class="mb-3">Votre Destination pour la Location de Voitures !</h4>
+    <div class="col-md-6">
+        <div class="content">
+            <h1>La location dont vous rêvez</h1>
+            <br><br>
+            <div class="info-section">
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon.png') }}" alt="Icon" class="icon"/>
+                    <p>Pas d'attente au comptoir</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-EEZ.png') }}" alt="Icon" class="icon"/>
+                    <p>Modèle garanti</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-2vh.png') }}" alt="Icon" class="icon"/>
+                    <p>Service et maintenance</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-EQm.png') }}" alt="Icon" class="icon"/>
+                    <p>De 1 à 30 jours</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-B5F.png') }}" alt="Icon" class="icon"/>
+                    <p>Accès 24h/24 et 7j/7</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-PN5.png') }}" alt="Icon" class="icon"/>
+                    <p>Annulation gratuite</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-x77.png') }}" alt="Icon" class="icon"/>
+                    <p>Service client 24h/24 et 7j/7</p>
+                </div>
+                <div class="info-item">
+                    <img src="{{ asset('img/icons-hp/spanicon-SZK.png') }}" alt="Icon" class="icon"/>
+                    <p>En agence</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        </br></br>
-        <!--h1>Liste des Véhicules</h1 -->
-        <div class="row g-5">
-            <div class="col-md-4 "  th:each="vehicule : ${vehicules}">
-                <div class="card text-center">
-                    <div class="card-header" th:text="'Caution: '+ ${vehicule.caution} + '€'">Caution</div>
-                    <div class="card-body">
-                        <div th:if="${vehicule.images.size() > 0}">
-                            <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${vehicule.images.get(0).imagePath}}" class="card-img-top" alt="Image du véhicule"/>
-                        </div>
-                        <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
-                        <p class="card-title">Tarifs:</p>
-                        <ul class="list-group list-group-light">
-                            <li class="list-group-item" th:each="tarif : ${vehicule.tarifs}">
-                                <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
-                            </li>
-                        </ul>
-                        <br>
-                        <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}" class="btn btn-primary" data-mdb-ripple-init>Button</a>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <p><span th:text="${vehicule.categorie.libelle}"></span></p>
-                        <p><span th:text="${vehicule.boiteVitesse}">Boite de vitesse</span></p>
-                    </div>
-                </div>
+    <div class="col-md-6">
+        <div class="content agence">
+            <div class="heading-2-en-livraison-ou-en-station valign-text-middle">En agence</div>
+
+            <p class="retrouvez-votre-agen valign-text-middle inter-normal-storm-dust-14px">
+                Retrouvez votre agence de location de voitures Locar <br/>
+                à Paris, 56 Boulevard de l’Imaginaire, 75008.
+            </p>
+            <p class="rservez-votre-voitu valign-text-middle inter-normal-storm-dust-14px">
+                Réservez votre voiture depuis notre plateforme. <br/>
+                Recupérez la clé du véhicule en agence après avoir donné la caution.
+            </p>
+        </div>
+    </div>
+    <div class="col-md-6" id="right-section"> <!-- La deuxième image est ajoutée en CSS --></div>
+</div>
+<br>
+<center>
+    <div class="delimiter"></div>
+</center>
+
+<br><br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <img class="img-fluid rounded-img" alt="" src="{{ asset('img/steps-hp/f48fcf-4a3e-4ecd-b40b-47009797ca51virtuodrivefree-694005xjpg.png') }}"/>
+            <div>
+                <h4>1. Ouvrez votre compte.</h4>
+                <p class="step-p">Téléchargez vos documents une fois pour toutes : pas de paperasse lors de vos locations de voiture avec Locar.</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <img class="img-fluid rounded-img" alt="" src="{{ asset('img/steps-hp/d0aab232-918b-4c9d-86c4-b5f99563bbaevirtuodrivefree-66405xjpg.png') }}"/>
+            <div>
+                <h4>2. Choisissez votre véhicule.</h4>
+                <p class="step-p">Découvrez notre sélection de véhicules de location de qualité : Tesla, Mercedes, Volkswagen, BMW, Peugeot, et plus.</p>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <img class="img-fluid rounded-img" alt="" src="{{ asset('img/steps-hp/edfa1adf-6134-430a-a97a-097b7a74251dvirtuodrivefree-16-mockup28329png.png') }}"/>
+            <div>
+                <h4>3. Récupérez votre véhicule en agence.</h4>
+                <p class="step-p">Récupérez la clé de votre véhicule en agence. Faites votre état des lieux avec notre plateforme, vous êtes parti.</p>
             </div>
         </div>
     </div>
+</div>
 
-<!--
-    <h1>Liste des Véhicules</h1>
-    <div th:each="vehicule : ${vehicules}">
-        <h2><a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}"> Détail du véhicule</a></h2>
-        <p>Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
-        <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
-        <h3>Tarifs:</h3>
-        <ul>
-            <li th:each="tarif : ${vehicule.tarifs}">
-                <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
-            </li>
-        </ul>
-        <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
-        <p>Catégorie: <span th:text="${vehicule.boiteVitesse}">Boite de vitesse</span></p>
+<center>
+    <div class="delimiter"></div>
+</center>
+
+<br>
+
+<div class="text-center mb-5">
+    <h2>Nos voitures</h2>
+    <p>Premium, garanties et suréquipées</p>
+    <p> Vous pouvez decrouvrir tout notre catalogue de voitures en <a href="{{ path('app_show_vehicule') }}">cliquant
+        ici. </a></p>
+</div>
+
+<div class="cars-container">
+    {% for vehicule in vehicules %}
+    <a href="{{ path('app_detail_vehicule', {'id': vehicule.id}) }}" class="card-link">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="fuel-badge d-flex align-items-center mb-3">
+                    {% if vehicule.fuel == 'Electrique' %}
+                    <img src="{{ asset('/img/vehicule-hp/svg-aZs.png') }}" alt=""
+                         class="img-fluid electric-icon"/>
+                    {% endif %}
+                    <h5 class="mb-0">{{ vehicule.fuel }}</h5>
+                </div>
+                <div class="mb-3">
+                    <img src="{{ vehicule.img }}" alt="" class="img-fluid"/>
+                    <h4 class="mt-3">{{ vehicule.categorie }}</h4>
+                    <p>{{ vehicule.modele }}</p>
+                    {% set tarif_jour = tarifs|filter(t => t.idVehicule == vehicule and t.calendrier == 'Journalier') %}
+                    Louez ce véhicule à partir de
+                    {% if tarif_jour|length > 0 %}
+                    {{ tarif_jour|first.prix }} € par jour
+                    {% else %}
+                    N/A
+                    {% endif %}
+                    <p>pour une location de 7 jours</p>
+                </div>
+                <div class="text-center">
+                    <a href="{{ path('app_detail_vehicule', {'id': vehicule.id}) }}" class="btn btn-primary">En
+                        savoir plus</a>
+                </div>
+            </div>
+            {% if loop.last %}
+            <div class="overlay-button">
+                {#                        <img src="{{ asset('/img/vehicule-hp/button.png') }}" alt=""/> #}
+                {#                        Intégrer le bouton.png et faire le design de celui-ci               #}
+            </div>
+            {% endif %}
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+<center>
+    <div class="delimiter"></div>
+</center>
+<br><br>
+
+<div class="d-flex align-items-center justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 text-center">
+        <h2>La nouvelle plateforme de location, Locar</h2>
+        <p class="step-p">Plus de files d'attente, plus de paperasse, allez directement à votre voiture.
+            En toute autonomie, récupérez votre voiture, ouvrez-là et faites l'état des lieux, tout
+            cela grâce à votre plateforme Locar.</p>
+        <div class="image-container">
+            <img class="img-fluid rounded-img" alt="" src="{{ asset('img/c0832aa8-98b1-4413-9299-f5897abd1fc3get-it-delivered-bannerpng.png') }}"/>
+            <div class="centered">
+                <p class="plateforme-p"> Louez votre voiture, nous vous la préparons </p>
+                <a href="{{ path('app_show_vehicule') }}" class="custom-button"> Catalogue de véhicules </a>
+            </div>
+        </div>
     </div>
+</div>
 
-    -->
-    <br><br>
-</section>
+<br> <br>
 
-</body>
-</html>
-
+<div class="container avis-container">
+    <h4>Ce que disent nos clients...</h4>
+    <p class="step-p">
+        Locar n'est pas uniquement portée sur la technologie mais également sur nos clients. La satisfaction de nos clients est notre ADN et
+        nous les accompagnons à chaque étape de leur location. Nous sommes fiers et heureux de vous partager leurs commentaires
+    </p>
+    <br>
+    <div class="carousel">
+        <div class="avis-list">
+            {% for avis in avisCollection %}
+            <div class="avis-item">
+                <h4>{{ avis.user }}</h4>
+                <p>{{ avis.commentaire }}</p>
+                <div class="avis-stars">
+                    {% for i in 1..5 %}
+                    {% if i <= avis.note %}
+                    <span class="star">&#9733;</span>
+                    {% else %}
+                    <span class="star-empty">&#9734;</span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <p id="date-avis"> le {{ avis.createdAt|date('d-m-Y à H:i') }}h</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

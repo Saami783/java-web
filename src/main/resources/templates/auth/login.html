@@ -3,149 +3,76 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/base}">
 <head>
-    <title th:text="${pageTitle}">Détail du véhicule</title>
-</head>
-<body>
-<style>
-    /* Ajoutez ici votre CSS personnalisé */
-    body {
-        font-family: Arial, sans-serif;
-    }
-    .login-container {
-        width: 300px;
-        margin: 100px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-    }
-    .form-group input {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-    .form-group button {
-        width: 100%;
-        padding: 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .form-group button:hover {
-        background-color: #0056b3;
-    }
-</style>
+    <title th:text="${pageTitle}">Authentification</title>
 
-<section layout:fragment="content">
-    <br><br><br><br>
-
-    <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <title>Please Log In</title>
-        <link rel="stylesheet">
-    </head>
-    <body>
     <style>
-        @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+        .form-control{
+            border-radius: 30px;
+            border: 1px solid lightgray;
+        }
+        .input-sm {
+            height: 30px;
+        }
 
-        .login-page {
-            width: 700px;
-            padding: 8% 0 0;
-            margin: auto;
+        #sign-in{
+            border-radius: 30px;
+            background-color: #A27E6B;
+            color: white;
         }
-        .form {
-            position: relative;
-            z-index: 1;
-            background: #FFFFFF;
-            max-width: 360px;
-            margin: 0 auto 100px;
-            padding: 45px;
-            text-align: center;
-            box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
+        #sign-in:hover{
+            background-color: #0a0a0a;
         }
-        .form input {
-            font-family: "Roboto", sans-serif;
-            outline: 0;
-            background: #f2f2f2;
-            width: 100%;
-            border: 0;
-            margin: 0 0 15px;
-            padding: 15px;
-            box-sizing: border-box;
-            font-size: 14px;
+
+        #create-account{
+            color: #A27E6B;
         }
-        .form .button {
-            font-family: "Roboto", sans-serif;
-            text-transform: uppercase;
-            outline: 0;
-            background: #4169E1;
-            width: 100%;
-            border: 0;
-            padding: 15px;
-            color: #FFFFFF;
-            font-size: 14px;
-            -webkit-transition: all 0.3 ease;
-            transition: all 0.3 ease;
-            cursor: pointer;
-        }
-        .form button:hover,.form button:active,.form button:focus {
-            background: #4169E1;
-        }
-        .form .message {
-            margin: 15px 0 0;
-            color: #b3b3b3;
-            font-size: 12px;
-        }
-        .form .error {
-            color: red;
-        }
-        .form h1 {
-            color: #4169E1;
-        }
-        .form .message a {
-            color: #4169E1;
-            text-decoration: none;
-        }
-        body {
-            background: #4169E1;
-            font-family: "Roboto", sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+
+        #create-account:hover{
+            text-decoration: underline;
         }
     </style>
-    <div class="login-page">
-        <div class="form">
-            <h1>Spring Boot Tutorial</h1>
-            <h2>Please Log In</h2>
-            <div class="error" th:if="${param.error}">
-                Invalid username and password.</div>
-            <div class="error" th:if="${param.logout}">
-                You have been logged out.</div>
-            <form  class="login-form" th:action="@{/login}" method="post">
-                <div>
-                    <input type="text" name="username" placeholder="Username"/>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <br><br><br><br>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-12">
+                <div class="card-body">
+
+                    <div class="alert alert-danger" th:if="${param.error}">Email ou mot de passe incorrect.</div>
+                    <div class="alert alert-success" th:if="${param.logout}">Vous êtes déjà connecté.</div>
+
+                    <form  class="login-form" th:action="@{/login}" method="post">
+                        <div style="text-align: center;"> <h3> Pas de compte ? </h3>
+                            <div class="form-group">
+                                <a th:href="@{/register}" class="form-control-a" id="create-account"> CRÉEZ VOTRE COMPTE </a>
+                            </div>
+                        </div>
+                        <p> </p>
+                        <div class="form-group col-md-8 offset-md-2">
+                            <label class="small mb-1" for="username">Email</label>
+                            <input class="form-control py-4 input-sm" type="email" id="username" name="username" placeholder="Email" autocomplete="email" required autofocus />
+                        </div>
+                        <p> </p>
+                        <div class="form-group col-md-8 offset-md-2">
+                            <label class="small mb-1" for="password">Password</label>
+                            <input class="form-control py-4 input-sm" type="password" id="password" name="password" placeholder="Mot de passe" autocomplete="current-password" required/>
+                        </div>
+
+                        <div class="form-group mt-4 mb-0 col-md-8 offset-md-2">
+                            <button class="btn btn-block" id="sign-in" type="submit" value="Log in" >
+                                Connexion
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div>
-                    <input type="password" name="password" placeholder="Password"/>
-                </div>
-                <input class="button" type="submit" value="Log in" />
-            </form>
-            <p>Willy De Keyser</p>
+            </div>
         </div>
     </div>
-    </body>
-    </html>
-
+    <br><br><br>
 </section>
 
 </body>

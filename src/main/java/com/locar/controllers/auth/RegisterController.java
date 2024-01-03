@@ -41,9 +41,11 @@ public class RegisterController {
     }
     @GetMapping
     public String showSignupForm(Model model, Principal principal) {
-        Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
-        if (utilisateur != null) {
-            return "redirect:/";
+        if (principal != null) {
+            Utilisateur utilisateur = this.utilisateurService.findByEmail(principal.getName());
+            if (utilisateur != null) {
+                return "redirect:/";
+            }
         }
         model.addAttribute("user", new Utilisateur());
         return "auth/register";
