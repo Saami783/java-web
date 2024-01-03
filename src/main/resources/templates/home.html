@@ -54,8 +54,8 @@
                         <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}" class="btn btn-primary" data-mdb-ripple-init>Button</a>
                     </div>
                     <div class="card-footer text-muted">
-                        <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
-                        <p>Catégorie: <span th:text="${vehicule.boiteVitesse}">Boite de vitesse</span></p>
+                        <p><span th:text="${vehicule.categorie.libelle}"></span></p>
+                        <p><span th:text="${vehicule.boiteVitesse}">Boite de vitesse</span></p>
                     </div>
                 </div>
             </div>
