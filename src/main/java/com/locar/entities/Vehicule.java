@@ -3,6 +3,7 @@ package com.locar.entities;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,13 +26,13 @@ public class Vehicule {
     private String folder;
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Tarif> tarifs;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categorie_id")
     private Categorie categorie;
-
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<VehiculeImages> images;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Vehicule() {
         this.tarifs = new ArrayList<>();
@@ -204,6 +205,8 @@ public class Vehicule {
     public void setImages(List<VehiculeImages> images) {
         this.images = images;
     }
+
+
 
     @Override
     public String toString() {

@@ -16,18 +16,17 @@ public class Reservation {
     private int nbJourReserve;
     private float prix;
     private String paymentToken;
-    private Date createdAt;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "facture_id", referencedColumnName = "id")
     private Facture facture;
-    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Avis> avisList;
     @ManyToOne
     @JoinColumn(name = "vehicule_id", nullable = false)
     private Vehicule vehicule;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Reservation() { }
 
@@ -71,14 +70,6 @@ public class Reservation {
         this.prix = prix;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Utilisateur getUtilisateur() {
         return utilisateur;
     }
@@ -95,13 +86,6 @@ public class Reservation {
         this.facture = facture;
     }
 
-    public List<Avis> getAvisList() {
-        return avisList;
-    }
-
-    public void setAvisList(List<Avis> avisList) {
-        this.avisList = avisList;
-    }
 
     public Vehicule getVehicule() {
         return vehicule;
@@ -119,6 +103,22 @@ public class Reservation {
         this.paymentToken = payement_token;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +
@@ -130,8 +130,6 @@ public class Reservation {
                 ", createdAt=" + createdAt +
                 ", utilisateur=" + utilisateur +
                 ", facture=" + facture +
-                ", avis=" + avisList +
-
                 '}';
     }
 }

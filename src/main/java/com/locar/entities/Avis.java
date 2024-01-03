@@ -2,6 +2,8 @@ package com.locar.entities;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 public class Avis {
     @Id
@@ -12,7 +14,12 @@ public class Avis {
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
+    private String commentaire;
+    private int note;
 
+    private Date publishedAt;
+
+    public Avis() { }
 
     public Reservation getReservation() {
         return reservation;
@@ -21,13 +28,6 @@ public class Avis {
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
     }
-
-    private String commentaire;
-    private int note;
-
-    public Avis() { }
-
-
 
     public String getCommentaire() {
         return commentaire;
@@ -43,6 +43,18 @@ public class Avis {
 
     public void setNote(int note) {
         this.note = note;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Date getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
     @Override

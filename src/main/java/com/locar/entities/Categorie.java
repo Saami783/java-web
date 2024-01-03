@@ -3,6 +3,7 @@ package com.locar.entities;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -12,12 +13,10 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String libelle;
-    @OneToMany(mappedBy = "categorie")
-    private List<Vehicule> vehicules;
+    private Date createdAt;
+    private Date updatedAt;
 
-    public Categorie() {
-        this.vehicules = new ArrayList<>();
-    }
+    public Categorie() { }
 
     public long getId() {
         return id;
@@ -35,12 +34,20 @@ public class Categorie {
         this.libelle = libelle;
     }
 
-    public List<Vehicule> getVehicules() {
-        return vehicules;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setVehicules(List<Vehicule> vehicules) {
-        this.vehicules = vehicules;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
@@ -48,7 +55,6 @@ public class Categorie {
         return "Categorie{" +
                 "id=" + id +
                 ", libelle='" + libelle + '\'' +
-                ", vehicules=" + vehicules +
                 '}';
     }
 }

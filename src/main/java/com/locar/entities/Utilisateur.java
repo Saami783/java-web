@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,8 @@ public class Utilisateur implements UserDetails {
     private boolean isVerifiedByAdmin;
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
+    private Date updatedAt;
+    private Date createdAt;
 
     public Utilisateur() {
         this.reservations = new ArrayList<>();
@@ -162,24 +165,28 @@ public class Utilisateur implements UserDetails {
         isVerifiedByAdmin = verifiedByAdmin;
     }
 
-    @Override
-    public String toString() {
-        return "Utilisateur{" +
-                "id=" + id +
-                ", roles='" + roles + '\'' +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", adresse='" + adresse + '\'' +
-                ", codePostal='" + codePostal + '\'' +
-                ", ville='" + ville + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", password='" + password + '\'' +
-                ", permis_path='" + permisPath + '\'' +
-                ", age=" + age +
-                ", isVerified=" + isVerified +
-                ", isVerifiedByAdmin=" + isVerifiedByAdmin +
-                '}';
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
@@ -215,6 +222,26 @@ public class Utilisateur implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "id=" + id +
+                ", roles='" + roles + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", adresse='" + adresse + '\'' +
+                ", codePostal='" + codePostal + '\'' +
+                ", ville='" + ville + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", password='" + password + '\'' +
+                ", permis_path='" + permisPath + '\'' +
+                ", age=" + age +
+                ", isVerified=" + isVerified +
+                ", isVerifiedByAdmin=" + isVerifiedByAdmin +
+                '}';
     }
 
 }
