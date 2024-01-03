@@ -9,6 +9,26 @@
 
 <section layout:fragment="content">
     <br><br><br><br>
+    <div
+            class="p-5 text-center bg-image"
+            style="
+      background-image: url('https://img.freepik.com/free-photo/new-white-car-dashboard_144627-8959.jpg?w=740&t=st=1704240449~exp=1704241049~hmac=87b4f86851d00a3331f56f36a3650a87461543451f30f4de7f40642be7d3c40e');
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+      background-color: rgba(0, 0, 0, 0.6);
+    "
+    >
+        <div class="mask" >
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <div class="text-white">
+                    <h1 class="mb-3">Découvrez le Véhicule</h1>
+                    <h4 class="mb-3">Tous les Détails pour Votre Prochaine Location chez Locar</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="container">
         <div class="card">
             <div class="card-body">
@@ -37,15 +57,20 @@
         <div th:if="${vehicule.disponible}">
             <form th:action="@{/reservations/create}" th:object="${reservation}" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <div>
-                    <label for="dateDebutReservation">Date de début:</label>
-                    <input type="date" id="dateDebutReservation" th:field="*{dateDebutReservation}" required>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="dateDebutReservation">Date de début:</label>
+                        <input type="date" id="dateDebutReservation"  class="form-control"  th:field="*{dateDebutReservation}" required>
+                    </div>
+                    <div class="col">
+                        <label for="dateFinReservation">Date de fin:</label>
+                        <input type="date" id="dateFinReservation"  class="form-control"  th:field="*{dateFinReservation}" required>
+                    </div>
                 </div>
-                <div>
-                    <label for="dateFinReservation">Date de fin:</label>
-                    <input type="date" id="dateFinReservation" th:field="*{dateFinReservation}" required>
-                </div>
+
                 <input type="hidden" th:field="*{vehicule.id}" />
+                <br>
                 <button type="submit" class="btn btn-primary">Réserver ce véhicule</button>
             </form>
         </div>
