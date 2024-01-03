@@ -31,10 +31,9 @@ public class Utilisateur implements UserDetails {
     private int age;
     private boolean isVerified;
     private boolean isVerifiedByAdmin;
+    private Date createdAt;
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
-    private Date updatedAt;
-    private Date createdAt;
 
     public Utilisateur() {
         this.reservations = new ArrayList<>();
@@ -161,6 +160,14 @@ public class Utilisateur implements UserDetails {
         return isVerifiedByAdmin;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public void setVerifiedByAdmin(boolean verifiedByAdmin) {
         isVerifiedByAdmin = verifiedByAdmin;
     }
@@ -171,22 +178,6 @@ public class Utilisateur implements UserDetails {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     @Override

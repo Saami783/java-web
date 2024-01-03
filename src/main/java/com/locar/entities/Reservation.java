@@ -26,7 +26,6 @@ public class Reservation {
     @JoinColumn(name = "vehicule_id", nullable = false)
     private Vehicule vehicule;
     private Date createdAt;
-    private Date updatedAt;
 
     public Reservation() { }
 
@@ -37,27 +36,21 @@ public class Reservation {
     public void setId(Long id) {
         this.id = id;
     }
-
     public Date getDateDebutReservation() {
         return dateDebutReservation;
     }
-
     public void setDateDebutReservation(Date dateDebutReservation) {
         this.dateDebutReservation = dateDebutReservation;
     }
-
     public Date getDateFinReservation() {
         return dateFinReservation;
     }
-
     public void setDateFinReservation(Date dateFinReservation) {
         this.dateFinReservation = dateFinReservation;
     }
-
     public int getNbJourReserve() {
         return nbJourReserve;
     }
-
     public void setNbJourReserve(int nbJourReserve) {
         this.nbJourReserve = nbJourReserve;
     }
@@ -86,7 +79,6 @@ public class Reservation {
         this.facture = facture;
     }
 
-
     public Vehicule getVehicule() {
         return vehicule;
     }
@@ -94,7 +86,6 @@ public class Reservation {
     public void setVehicule(Vehicule vehicule) {
         this.vehicule = vehicule;
     }
-
     public String getPaymentToken() {
         return paymentToken;
     }
@@ -105,18 +96,6 @@ public class Reservation {
 
     public Date getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     @Override

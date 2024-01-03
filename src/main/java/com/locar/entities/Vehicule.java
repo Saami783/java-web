@@ -32,7 +32,6 @@ public class Vehicule {
     @OneToMany(mappedBy = "vehicule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<VehiculeImages> images;
     private Date createdAt;
-    private Date updatedAt;
 
     public Vehicule() {
         this.tarifs = new ArrayList<>();
@@ -140,6 +139,14 @@ public class Vehicule {
         this.description = description;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public List<Tarif> getTarifs() {
         return this.tarifs;
     }
@@ -205,8 +212,6 @@ public class Vehicule {
     public void setImages(List<VehiculeImages> images) {
         this.images = images;
     }
-
-
 
     @Override
     public String toString() {

@@ -10,13 +10,10 @@ public class VehiculeImages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicule_id", nullable = false)
     private Vehicule vehicule;
     private String imagePath;
-    private Date createdAt;
-    private Date updatedAt;
 
     public void setId(Long id) {
         this.id = id;
@@ -38,22 +35,6 @@ public class VehiculeImages {
     }
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     @Override

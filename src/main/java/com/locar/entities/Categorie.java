@@ -13,8 +13,6 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String libelle;
-    private Date createdAt;
-    private Date updatedAt;
 
     public Categorie() { }
 
@@ -32,22 +30,6 @@ public class Categorie {
 
     public void setLibelle(String libelle) {
         this.libelle = libelle;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     @Override

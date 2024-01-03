@@ -9,15 +9,12 @@ public class Tarif {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicule_id")
     private Vehicule vehicule;
     private String calendrier;
     private float prix;
     private int km;
-    private Date createdAt;
-    private Date updatedAt;
 
     public Tarif() { }
 
@@ -42,11 +39,9 @@ public class Tarif {
     public void setPrix(float prix) {
         this.prix = prix;
     }
-
     public int getKm() {
         return km;
     }
-
     public void setKm(int km) {
         this.km = km;
     }
@@ -57,22 +52,6 @@ public class Tarif {
 
     public void setVehicule(Vehicule vehicule) {
         this.vehicule = vehicule;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     @Override

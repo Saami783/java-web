@@ -30,16 +30,14 @@
                         </li>
 
                         <!-- Liens pour les utilisateurs connectés -->
-                        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+                        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()') and !#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
                             <a class="nav-link" th:href="@{/reservations}">Mes réservations</a>
-                        </li>
-                        <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-                            <a class="nav-link" th:href="@{/profil}">Profil</a>
                         </li>
 
                         <li class="nav-item" th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
                             <a class="nav-link" th:href="@{/admin/users}">Admin</a>
                         </li>
+
 
                         <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
                             <a class="nav-link" th:href="@{/logout}">Déconnexion</a>
