@@ -1,0 +1,161 @@
+#left-section {
+    display: block;
+    background-image: url("../img/home/home-vehicule.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 500px;
+    left: 0;
+    top: -72px;
+}
+.info-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.delimiter{
+    background-color: #d0caca;
+    height: 1px;
+    width: 75%;
+}
+
+.rounded-img {
+    object-fit: cover;
+    width: 100%;
+    height: 200px;
+    border-radius: 20px; /* ajoutez le rayon de bordure que vous voulez */
+}
+
+.step-p{
+    color: grey;
+}
+
+.cars-container {
+    display: flex; /* Faites défiler les cards horizontalement */
+    overflow-x: auto; /* Permettez le défilement si les cards dépassent la largeur de l'écran */
+    scroll-snap-type: x mandatory; /* Pour un scroll plus fluide */
+    gap: 20px; /* Espace entre les cards */
+    align-items: start;
+}
+
+.card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.fuel-badge {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    width: fit-content;
+}
+
+.fuel-badge h5 {
+    margin: 0 0 0 5px;
+}
+
+.electric-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.card:hover .btn-primary {
+    color: #fff;
+}
+
+.card img {
+    border-radius: 15px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #333;
+    border-color: #333;
+}
+
+.card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.card:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.3);
+    color: inherit;
+}
+
+.card:hover * {
+    color: inherit;
+}
+
+.card img {
+    border-radius: 15px;
+}
+
+.cars-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    align-items: start;
+}
+
+.custom-button {
+    display: inline-block;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 1em;
+    color: #ffffff;
+    background-color: #000000;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.custom-button:hover {
+    background-color: #333333;
+}
+
+.custom-button:active {
+    color: #ffffff;
+}
+
+.custom-button:focus {
+    outline: none;
+}
+
+.centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 90%;
+}
+
+.image-container .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.image-container {
+    position: relative;
+    text-align: center;
+}
+
+.image-container .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}

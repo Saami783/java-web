@@ -38,6 +38,8 @@ public class SpringSecurityConfig {
                     auth.requestMatchers("/user", "/reservations", "/reservations/{id}").hasRole("USER");
                     auth.requestMatchers("/reservations/create", "paiement/**", "ckeckout/**").hasRole("USER");
                     auth.requestMatchers("/register", "/", "/vehicules", "/vehicules/{id}", "/uploads/**").permitAll();
+                    auth.requestMatchers("/webjars/**", "/images/**", "/css/**", "/assets/**", "/favicon.ico").permitAll();
+                    auth.requestMatchers("/img/**", "/uploads/**", "/css/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(formLogin -> formLogin
@@ -53,12 +55,6 @@ public class SpringSecurityConfig {
                 .build();
     }
 
-    @Bean
-    WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.debug(false)
-                .ignoring()
-                .requestMatchers("/webjars/**", "/images/**", "/css/**", "/assets/**", "/favicon.ico");
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder) throws Exception {
