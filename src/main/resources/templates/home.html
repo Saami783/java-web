@@ -108,12 +108,11 @@
                             <h4 th:text="${vehicule.categorie.libelle}"></h4>
                             <p th:text="${vehicule.modele}"></p>
                             <div th:if="${!#lists.isEmpty(vehicule.tarifs)}">
-                                <p>Louez ce véhicule à partir de <span th:text="${vehicule.tarifs[0].prix}">Prix</span> €</p>
+                                <p>Louez ce véhicule à partir de <span th:text="${vehicule.tarifs[0].prix}">Prix</span> € par jour <br> pour une location de 7 jours </p>
                             </div>
                             <div th:unless="${!#lists.isEmpty(vehicule.tarifs)}">
-                                <p>N/A</p>
+                               <p> N/A </p>
                             </div>
-                            <p>pour une location de 7 jours</p>
                         </div>
                         <div class="text-center">
                             <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" class="btn btn-primary">En savoir plus</a>

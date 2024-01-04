@@ -32,7 +32,9 @@ public class Main {
     @GetMapping
     public String home(Model model) {
         List<Vehicule> vehicules = vehiculeService.findAll();
-
+        if (vehicules.size() > 3) {
+            vehicules = vehicules.subList(0, 3);
+        }
         model.addAttribute("vehicules", vehicules);
         return "home";
     }
