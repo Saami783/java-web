@@ -1,85 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}">
+      layout:decorate="~{layouts/base}" lang="fr">
 <head>
     <title th:text="${pageTitle}">Catalogue</title>
+    <style>
+        .card-link-custom { color: inherit; text-decoration: none; }
+        .card-link-custom:hover { text-decoration: none; }
+        .card-img-top { height: 200px; object-fit: cover; width: 100%; }
+        .card { height: 100%; }
+    </style>
 </head>
 <body>
 
 <section layout:fragment="content">
     <br><br><br><br>
-    <!-- Background image -->
-    <div
-            class="p-5 text-center bg-image"
-            style="
-      background-image: url('https://img.freepik.com/free-photo/luxurious-car-parked-highway-with-illuminated-headlight-sunset_181624-60607.jpg?w=1380&t=st=1704235340~exp=1704235940~hmac=dfb76e203a8d01d8af29161539fd33d1f86041da5c0e31b6d80526edc78c68d7');
-      height: 400px;
-      background-size: cover;
-      background-position: center;
-      background-color: rgba(0, 0, 0, 0.6);
-    "
-    >
-        <div class="mask" >
-            <div class="d-flex justify-content-center align-items-center h-100">
-                <div class="text-white">
-                    <h1 class="mb-3">Explorez notre Catalogue</h1>
-                    <h4>Trouvez la Voiture Parfaite chez Locar</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-    <h1></h1>
-
-    <div class="container">
-        </br></br>
-        <h1>Liste des Véhicules</h1>
-        <div class="row g-5">
-            <div class="col-md-4 "  th:each="vehicule : ${vehicules}">
-                <div class="card text-center">
-                    <div class="card-header" th:text="'Caution: '+ ${vehicule.caution} + '€'">Caution</div>
-                    <div class="card-body">
-                        <div th:if="${vehicule.images.size() > 0}">
-                            <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${vehicule.images.get(0).imagePath}}" class="card-img-top" alt="Image du véhicule"/>
+    <div class="container mt-4">
+        <div class="row">
+            <div th:each="vehicule : ${vehicules}" class="col-md-4 mb-4">
+                <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" class="card-link-custom">
+                    <div class="card h-100">
+                        <div th:id="'carouselExampleIndicators' + ${vehicule.id}" class="carousel slide">
+                            <div class="carousel-inner">
+                                <div th:each="image, iterStat : ${vehicule.images}" th:class="'carousel-item ' + (${iterStat.index == 0} ? 'active' : '')">
+                                    <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${image.imagePath}}" class="d-block w-100 card-img-top" alt="Image du véhicule"/>
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" th:attr="data-bs-target='#carouselExampleIndicators' + ${vehicule.id}, data-bs-slide='prev'">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" th:attr="data-bs-target='#carouselExampleIndicators' + ${vehicule.id}, data-bs-slide='next'">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
                         </div>
-                        <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
-                        <p class="card-title">Tarifs:</p>
-                        <ul class="list-group list-group-light">
-                            <li class="list-group-item" th:each="tarif : ${vehicule.tarifs}">
-                                <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
-                            </li>
-                        </ul>
-                        <br>
-                        <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}" class="btn btn-primary" data-mdb-ripple-init>Button</a>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title" th:text="${vehicule.categorie.libelle + ' ' + vehicule.modele}"></h5>
+                            <div th:if="${!#lists.isEmpty(vehicule.tarifs)}">
+                                <p>A partir de <span th:text="${vehicule.tarifs[0].prix}">Prix</span> € par jour.</p>
+                            </div>
+                            <div th:unless="${!#lists.isEmpty(vehicule.tarifs)}">
+                                <p> N/A </p>
+                            </div>
+                            <div class="text-center">
+                                <a th:href="@{/vehicules/{id}(id=${vehicule.id})}" class="btn btn-primary">En savoir plus</a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer text-muted">
-                        <p><span th:text="${vehicule.categorie.libelle}"></span></p>
-                        <p><span th:text="${vehicule.boiteVitesse}">Boite de vitesse</span></p>
-                    </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
-    <!-- div th:each="vehicule : ${vehicules}">
-
-        <h2><a th:href="@{/vehicules/{id}(id=${vehicule.id})}" th:text="${vehicule.modele}"> Détail du véhicule</a></h2>
-        <p>Caution: <span th:text="${vehicule.caution}+ '€'">Caution</span></p>
-        <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
-        <h3>Tarifs:</h3>
-        <ul>
-            <li th:each="tarif : ${vehicule.tarifs}">
-                <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
-            </li>
-        </ul>
-        <div th:if="${vehicule.images.size() > 0}">
-            <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${vehicule.images.get(0).imagePath}}" alt="Image du véhicule"/>
-        </div>
-        <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
-        <h3>Images:</h3>
-            <hr>
-    </div -->
-
-    <br><br>
 </section>
 
 </body>

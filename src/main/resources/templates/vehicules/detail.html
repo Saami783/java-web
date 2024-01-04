@@ -1,175 +1,101 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/base}" lang="fr">
 <head>
     <title th:text="${pageTitle}">Détail du véhicule</title>
+    <link rel="stylesheet" th:href="@{/css/vehiule/detail/detail.css}" />
 </head>
 <body>
 
 <section layout:fragment="content">
-    <br><br><br><br>
-    <div
-            class="p-5 text-center bg-image"
-            style="
-      background-image: url('https://img.freepik.com/free-photo/new-white-car-dashboard_144627-8959.jpg?w=740&t=st=1704240449~exp=1704241049~hmac=87b4f86851d00a3331f56f36a3650a87461543451f30f4de7f40642be7d3c40e');
-      height: 300px;
-      background-size: cover;
-      background-position: center;
-      background-color: rgba(0, 0, 0, 0.6);
-    "
-    >
-        <div class="mask" >
-            <div class="d-flex justify-content-center align-items-center h-100">
-                <div class="text-white">
-                    <h1 class="mb-3">Découvrez le Véhicule</h1>
-                    <h4 class="mb-3">Tous les Détails pour Votre Prochaine Location chez Locar</h4>
+    <br><br><br><br><br><br><br><br>
+    <div class="container mt-5">
+        <h3 th:text="${vehicule.categorie.libelle + ' ' + vehicule.modele}">Vehicule</h3>
+        <div class="row">
+            <div class="col-lg-8">
+                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div th:each="image, iterStat : ${vehicule.images}" th:class="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+                            <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${image.imagePath}}" class="d-block w-100" alt="Image du véhicule"/>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+                <div class="row mt-3 images-slider">
+                    <div th:each="image, iterStat : ${vehicule.images}" class="col-2">
+                        <a href="#" th:attr="data-target='#carouselExampleControls', data-slide-to=${iterStat.index}">
+                            <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${image.imagePath}}" class="img-thumbnail" alt="Image miniature du véhicule"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="information-block">
+                    <h3>Informations sur le véhicule</h3>
+                    <p th:text="${vehicule.categorie.libelle} + ' ' + ${vehicule.modele} + ' - ' + ${vehicule.annee} + ' ' + ${vehicule.couleur}">Informations du véhicule</p>
+                    <p th:text="'Type de boîte : ' + ${vehicule.boiteVitesse} + ' - ' + ${vehicule.nbKm} + ' km'">Boite de vitesse et kilométrage</p>
+                    <p th:text="'Carburant : ' + ${vehicule.fuel}">Carburant</p>
+                    <p th:text="'Nombre de chevaux : ' + ${vehicule.nbCheveaux}">Nombre de chevaux</p>
+                    <p th:text="'Nombre de places : ' + ${vehicule.nbPlace}">Nombre de places</p>
+                    <hr>
+
+                    <h3>Tarifs</h3>
+                    <div th:each="tarif : ${vehicule.tarifs}" class="tarif">
+                        <strong><span th:text="${tarif.calendrier} + ' : '"></span></strong>
+                        <span th:text="${tarif.prix} + ' €'"></span>
+                    </div>
+                    <p></p>
+                    <p class="caution" th:text="'Caution : ' + ${vehicule.caution} + ' €'">Caution</p>
+
+                    <div th:if="${!#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
+                        <hr>
+                        <h3>Réserver ce véhicule</h3>
+                        <div th:if="${error}" class="alert alert-danger">
+                            <p th:text="${error}">Message d'erreur</p>
+                        </div>
+                        <div th:if="${vehicule.disponible}">
+                            <form th:action="@{/reservations/create}" th:object="${reservation}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="dateDebutReservation">Date de début:</label>
+                                        <input type="date" id="dateDebutReservation"  class="form-control"  th:field="*{dateDebutReservation}" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="dateFinReservation">Date de fin:</label>
+                                        <input type="date" id="dateFinReservation"  class="form-control"  th:field="*{dateFinReservation}" required>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" th:field="*{vehicule.id}" />
+                                <br>
+                                <button type="submit" class="btn btn-primary">Réserver ce véhicule</button>
+                            </form>
+                        </div>
+
+                        <div th:unless="${vehicule.disponible}">
+                            <br>
+                            <p class="alert alert-info">Ce véhicule est actuellement indisponible.</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <br>
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${vehicule.modele}">Modèle du véhicule</h5>
-                <p class="card-text">Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
-                <p class="card-text">Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
-                <h3>Tarifs:</h3>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <ul class="list-group list-group-light">
-                    <li class="list-group-item" th:each="tarif : ${vehicule.tarifs}">
-                        <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
-                    </li>
-                </ul>
-                <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
-            </div>
-            <div th:each="image : ${vehicule.images}">
-                <img class="card-img-top"  th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${image.imagePath}}" alt="Image du véhicule"/>
-            </div>
-
-        </div>
-        <br>
-        <div th:if="${!#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}">
-            <h3>Réservation du véhicule</h3>
-            <div th:if="${error}" class="alert alert-danger">
-                <p th:text="${error}">Message d'erreur</p>
-            </div>
-            <div th:if="${vehicule.disponible}">
-                <form th:action="@{/reservations/create}" th:object="${reservation}" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-                    <div class="row">
-                        <div class="col">
-                            <label for="dateDebutReservation">Date de début:</label>
-                            <input type="date" id="dateDebutReservation"  class="form-control"  th:field="*{dateDebutReservation}" required>
-                        </div>
-                        <div class="col">
-                            <label for="dateFinReservation">Date de fin:</label>
-                            <input type="date" id="dateFinReservation"  class="form-control"  th:field="*{dateFinReservation}" required>
-                        </div>
-                    </div>
-
-                    <input type="hidden" th:field="*{vehicule.id}" />
-                    <br>
-                    <button type="submit" class="btn btn-primary">Réserver ce véhicule</button>
-                </form>
-            </div>
-
-            <div th:unless="${vehicule.disponible}">
-                <p class="alert alert-info">Ce véhicule n'est actuellement pas disponible pour la réservation.</p>
-            </div>
-        </div>
-    </div>
-
-    <br><br><br>
-
-<!--
-
-    <div th:unless="${vehicule.disponible}">
-        <p class="alert alert-info">Ce véhicule n'est actuellement pas disponible pour la réservation.</p>
-    </div>
-
-    <h1 th:text="${vehicule.modele}"></h1>
-    <p>Caution: <span th:text="${vehicule.caution} + '€'">Caution</span></p>
-    <p>Nombre de places: <span th:text="${vehicule.nbPlace}">Nombre de places</span></p>
-    <h3>Tarifs:</h3>
-    <ul>
-        <li th:each="tarif : ${vehicule.tarifs}">
-            <span th:text="${tarif.calendrier} + ' : ' + ${tarif.prix} + '€'">Tarif</span>
-        </li>
-    </ul>
-    <p>Catégorie: <span th:text="${vehicule.categorie.libelle}">Catégorie</span></p>
-
-    <h3>Images:</h3>
-    <div th:each="image : ${vehicule.images}">
-        <img th:src="@{'/uploads/img/vehicules/' + ${vehicule.folder} + '/' + ${image.imagePath}}"
-             alt="Image du véhicule"/>
-    </div>
-
-
-
-    <h3>Réserver ce véhicule</h3>
-    <div th:if="${error}" class="alert alert-danger">
-        <p th:text="${error}">Message d'erreur</p>
-    </div>
-
-
-    <div th:unless="${vehicule.disponible}">
-        <p class="alert alert-info">Ce véhicule n'est actuellement pas disponible pour la réservation.</p>
-    </div>
-<<<<<<< HEAD
-
-    <form th:action="@{/reservations/create}" th:object="${reservation}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <div>
-            <label for="dateDebutReservation">Date de début:</label>
-            <input type="date" id="dateDebutReservation" th:field="*{dateDebutReservation}" required>
-        </div>
-        <div>
-            <label for="dateFinReservation">Date de fin:</label>
-            <input type="date" id="dateFinReservation" th:field="*{dateFinReservation}" required>
-        </div>
-        <input type="hidden" th:field="*{vehicule.id}"/>
-        <button type="submit" class="btn btn-primary">Réserver ce véhicule</button>
-    </form>
-
-    <br/>
-    <br/>
-
-    <form th:action="@{/avis/create}" th:object="${avisForm}" method="post">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <div>
-            <label for="commentaire">Commentaire:</label><br/>
-            <textarea id="commentaire" name="commentaire" th:field="*{commentaire}" required cols="30"></textarea>
-        </div>
-        <div>
-            <label for="note">Note:</label>
-            <input type="number" id="note" min="1" max="5" maxlength="1" th:field="*{note}" required>
-        </div>
-        <input type="hidden" th:field="${vehicule.id}"/>
-        <button type="submit" class="btn btn-primary">Publier mon avis</button>
-    </form>
-=======
--->
+    <br><br><br><br><br><br><br><br><br>
 </section>
 
-
-<section>
-    <div th:unless="${#lists.isEmpty(avisList)}">
-        <div th:each="avis : ${avisList}">
-            <p>Note: <span th:text="${avis.note}">Note Value</span></p>
-            <p>Commentaire: <span th:text="${avis.commentaire}">Commentaire</span></p>
-        </div>
-    </div>
-
-    <!-- Display message if no avis exist -->
-    <div th:if="${#lists.isEmpty(avisList)}">
-        <p class="alert alert-danger">Aucun avis pour ce véhicule</p>
-    </div>
-</section>
-
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

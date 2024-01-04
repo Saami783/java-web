@@ -1,73 +1,46 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/base}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
-    <title th:text="${pageTitle}">Mes réservation</title>
+    <title th:text="${pageTitle}">Mes réservations</title>
+
 </head>
 <body>
-    <section layout:fragment="content">
-        <br><br><br><br>
-
-        <div class="container">
-
-            <h1>Mes réservations </h1>
-            <br><br>
-            <div class="alert alert-danger" th:if="${error}">
-                <p th:text="${error}">Message d'erreur</p>
-            </div>
-            <div class="alert alert-success" th:if="${success}">
-                <p th:text="${success}">Message de succès</p>
-            </div>
-
-            <div th:each="reservation : ${reservations}">
-                <h2><a th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Reservation nº' + ${reservation.id}"> Détail de la réservation</a></h2>
-                <p>
-                    <a th:href="@{/vehicules/{id}(id=${reservation.vehicule.id})}"
-                       th:text="'Vehicule : ' + ${reservation.vehicule.categorie.libelle + ' ' + reservation.vehicule.modele}"> Détail de la réservation</a>
-                </p>
-                <p>Prix total: <span th:text="${reservation.prix}+ '€'">Prix total :</span></p>
-                <p>Début de la location : <span th:text="${#dates.format(reservation.dateDebutReservation, 'dd-MMM-yyyy')}"> </span></p>
-                <p>Fin de la location : <span th:text="${#dates.format(reservation.dateFinReservation, 'dd-MMM-yyyy')}"> </span> </p>
-                <p>Jours total : <span th:text="${reservation.nbJourReserve}+ 'jours'">Prix total :</span></p>
-                <p>Réservation effectué le : <span th:text="${#dates.format(reservation.createdAt, 'dd-MMM-yyyy')}"> </span></p>
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col col-2">
-                            <h2>
-                                <a class="btn btn-info" th:href="@{/facture/pdf/{id}(id=${reservation.id})}"
-                                   th:text="${reservation.facture == null ? 'Devis' : 'Facture'} + ' en PDF'">Facture en PDF</a>
-                            </h2>
-                        </div>
-                        <div class="col col-2">
-                            <h2 th:unless="${reservation.facture}">
-                                <a class="btn btn-success" th:href="@{/paiement/stripe/{id}(id=${reservation.id})}" th:text="'Payer'">Payer</a>
-                            </h2>
-                        </div>
-                        <div class="col col-2">
-                            <h2>
-                                <a class="btn btn-primary" th:href="@{/reservations/{id}(id=${reservation.id})}" th:text="'Plus de détails'">Plus de détails</a>
-                            </h2>
-                        </div>
-                        <div class="col col-2">
-                            <h2 th:unless="${reservation.facture}">
-                                <a class="btn btn-info" th:href="@{/reservations/edit/{id}(id=${reservation.id})}" th:text="'Modifier'">Modifier</a>
-                            </h2>
-                        </div>
-                        <div class="col col-2">
-                            <h2 th:unless="${reservation.facture}">
-                                <a class="btn btn-danger" th:href="@{/reservations/delete/{id}(id=${reservation.id})}"> Supprimer </a>
-                            </h2>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-            </div>
-
+<section layout:fragment="content">
+<br><br><br>
+    <div class="container mt-5">
+        <h1>Mes réservations</h1>
+    </div>
+    <br><br><br>
+    <div class="container mt-5">
+        <br>
+        <div class="alert alert-danger" th:if="${error}">
+            <p th:text="${error}">Message d'erreur</p>
+        </div>
+        <div class="alert alert-success" th:if="${success}">
+            <p th:text="${success}">Message de succès</p>
         </div>
 
-    </section>
-</body>
+        <div th:each="reservation : ${reservations}" class="card mx-auto shadow mb-4" style="width: 80%; background-color: #f8f9fa;">
+            <div class="card-body">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="card-title" th:text="'Réservation nº' + ${reservation.id}"></h5>
+                    <small th:text="${#dates.format(reservation.createdAt, 'dd/MM/yyyy')}"></small>
+                </div>
+                <p class="card-text" th:text="'Véhicule : ' + ${reservation.vehicule.categorie.libelle + ' ' + reservation.vehicule.modele}"></p>
+                <p class="card-text" th:text="'Durée de la location : ' + ${reservation.nbJourReserve} + ' jours'"></p>
+                <p class="card-text" th:text="'Prix : ' + ${reservation.prix} + ' €'"></p>
+                <div class="d-flex flex-wrap flex-sm-row flex-column justify-content-end">
+                    <a th:href="@{/reservations/{id}(id=${reservation.id})}" class="btn btn-primary btn-sm my-1 mx-1">Détails</a>
+                    <a th:unless="${reservation.facture}" th:href="@{/paiement/stripe/{id}(id=${reservation.id})}" class="btn btn-success btn-sm my-1 mx-1">Payer</a>
+                    <a th:href="@{/facture/pdf/{id}(id=${reservation.id})}" class="btn btn-secondary btn-sm my-1 mx-1" th:text="${reservation.facture == null ? 'Devis PDF' : 'Facture PDF'}"></a>
+                </div>
+            </div>
+        </div>
 
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</section>
+</body>
 </html>

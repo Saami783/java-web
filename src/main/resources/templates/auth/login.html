@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html layout:decorate="~{layouts/base}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/base}">
+      xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <title th:text="${pageTitle}">Authentification</title>
 
@@ -36,7 +36,9 @@
 
 <body>
 <section layout:fragment="content">
-    <br><br><br><br>
+    <br><br><br>
+    <div class="container mt-5"></div>
+    <br><br><br>
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8 col-sm-12">
@@ -72,7 +74,7 @@
             </div>
         </div>
     </div>
-    <br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </section>
 
 </body>

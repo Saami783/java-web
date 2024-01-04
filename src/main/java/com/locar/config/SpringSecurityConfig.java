@@ -39,7 +39,7 @@ public class SpringSecurityConfig {
                     auth.requestMatchers("/reservations/create", "paiement/**", "ckeckout/**").hasRole("USER");
                     auth.requestMatchers("/register", "/", "/vehicules", "/vehicules/{id}", "/uploads/**").permitAll();
                     auth.requestMatchers("/webjars/**", "/images/**", "/css/**", "/assets/**", "/favicon.ico").permitAll();
-                    auth.requestMatchers("/img/**", "/uploads/**", "/css/**").permitAll();
+                    auth.requestMatchers("/img/**", "/uploads/**", "/css/**", "/uploads/img/vehicules/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .formLogin(formLogin -> formLogin

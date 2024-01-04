@@ -1,8 +1,8 @@
-INSERT INTO `categorie` (`id`, `libelle`, `created_at`, `updated_at`) VALUES
-(1, 'AUDI', '2023-12-27', '2023-12-27'),
-(2, 'ABARTH', '2023-12-27', '2023-12-27'),
-(3, 'MERCEDES BENZ', '2023-12-27', '2023-12-27'),
-(4, 'MERCEDES', '2023-12-27', '2023-12-27'),
-(5, 'RANGE ROVER', '2023-12-27', '2023-12-27'),
-(6, 'VOLKSWAGEN', '2023-12-27', '2023-12-27'),
-(7, 'BMW', '2023-12-27', '2023-12-27');
+INSERT INTO `categorie` (`id`, `libelle`) VALUES
+                                              (1, 'AUDI'),
+                                              (2, 'ABARTH'),
+                                              (3, 'MERCEDES BENZ'),
+                                              (4, 'MERCEDES'),
+                                              (5, 'RANGE ROVER'),
+                                              (6, 'VOLKSWAGEN'),
+                                              (7, 'BMW');

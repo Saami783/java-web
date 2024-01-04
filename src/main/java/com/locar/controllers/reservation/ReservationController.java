@@ -166,6 +166,9 @@ public class ReservationController {
             redirectAttributes.addFlashAttribute("error", "Une erreur est survenue lors de " + "la suppression de la réservation");
             return "redirect:/reservations";
         }
+        Vehicule vehicule = reservation.get().getVehicule();
+        vehicule.setIsDisponible(true);
+        this.vehiculeService.save(vehicule);
         redirectAttributes.addFlashAttribute("success", "Votre réservation a été supprimée avec succès");
         return "redirect:/reservations";
     }
@@ -205,7 +208,8 @@ public class ReservationController {
             reservation.setUtilisateur(utilisateur);
             reservation.setVehicule(vehicule);
             reservation.setFacture(null);
-
+            vehicule.setIsDisponible(false);
+            this.vehiculeService.save(vehicule);
             this.reservationService.save(reservation);
 
             return "redirect:/reservations";
